@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"editor.tabSize": 3,
+		"LuaCoderAssist.luacheck.std": [
+			"luajit",
+			"love"
+		]
+	}
+}
