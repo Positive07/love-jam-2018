@@ -36,7 +36,7 @@ function Physics:update(dt)
          friction = friction * body.groundCoef
          friction = friction * dt
 
-         body.velocity.x = v.velocity.x - friction * dt
+         body.velocity.x = body.velocity.x - friction * dt
       end
 
       -- Clamping

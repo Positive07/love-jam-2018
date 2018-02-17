@@ -24,6 +24,10 @@ function Collider:entityRemoved(e)
    if collider then
       collider.world = nil
    end
+
+   if e:has(C.grounded) then
+      e:remove(C.grounded)
+   end
 end
 
 function Collider:update()
@@ -37,6 +41,7 @@ function Collider:update()
       local newx, newy, cols, len = self.world:move(e, transform.position.x - transform.size.x/2, transform.position.y - transform.size.y/2, collider.filter)
       transform.position:set(newx + transform.size.x/2, newy + transform.size.y/2)
 
+      e:remove(C.grounded)
       for i = 1, len do
          collider.resolve(cols[i])
       end
