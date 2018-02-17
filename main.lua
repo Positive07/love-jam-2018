@@ -1,11 +1,11 @@
+local ScreenManager = require("libs.manager")
+
 function love.load ()
+   local screens = {
+      menu = require("src.states.menu"),
+      game = require("src.states.game"),
+   }
 
-end
-
-function love.update (dt)
-
-end
-
-function love.draw ()
-
+   ScreenManager.registerCallbacks()
+   ScreenManager.init(screens.game)
 end
