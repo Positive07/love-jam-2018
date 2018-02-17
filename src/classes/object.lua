@@ -3,6 +3,7 @@ local List   = require("libs.list")
 local Vector = require("libs.vector")
 
 local World = require("src.world")
+local Batch = require("src.states.game.batch")
 
 local Object = Class("Object")
 Object.list        = List()
@@ -23,7 +24,8 @@ function Object:initialize(t)
    self.airFrictionCoef    = 20
    self.epsilon            = 0.75
 
-   self.sprite = t.sprite
+   self.sprite   = t.sprite
+   self.spriteID = nil
 
    self.dynamic = t.dynamic
 
@@ -128,7 +130,7 @@ end
 
 function Object:draw()
    if self.sprite then
-      love.graphics.draw(self.sprite, self.position.x, self.position.y, nil, nil, nil, self.sprite:getWidth()/2, self.sprite:getHeight()/2)
+      self.spriteID = Batch.draw(self.spriteID, self.position.x, self.position.y, nil, nil, nil, self.sprite:getWidth()/2, self.sprite:getHeight()/2)
    else
       love.graphics.rectangle("fill", math.floor(self.position.x - self.size.x/2), math.floor(self.position.y - self.size.y/2), self.size.x, self.size.y)
    end

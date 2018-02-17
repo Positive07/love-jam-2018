@@ -26,15 +26,6 @@ function Cube:move()
 end
 
 function Cube:update(dt)
-   --[[
-   self.timeLeftMove = self.timeLeftMove - dt
-
-   if self.timeLeftMove <= 0 then
-      self:move()
-      self.timeLeftMove = self.maxTimeMove
-   end
-   ]]
-
    local nx, ny, cols, len = World:move(self, self.position.x - self.size.x/2, self.position.y - self.size.y/2, self.filter)
    self.position.x, self.position.y = nx + self.size.x/2, ny + self.size.y/2
 

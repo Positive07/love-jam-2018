@@ -45,14 +45,16 @@ function Game:init()
    Game.flux = require("src.states.game.flux")
 
    Game.music = Wave:newSource("music/boss_song_1.wav", "static")
+   Game.batch = require("src.states.game.batch")
 
    Game.music:setIntensity(20)
+   Game.music:setVolume(0)
    Game.music:setBPM(70)
    Game.music:onBeat(function()
       cube:move()
    end)
 
-   Game.music:play()
+   Game.music:play(true)
 end
 
 function Game:update(propagate, dt)
@@ -74,6 +76,8 @@ function Game:draw(propagate)
       for i = 1, Object.list.size do
          Object.list:get(i):draw()
       end
+
+      Game.batch.render()
 
       love.graphics.setColor(225, 30, 30)
       local items, len = World:getItems()
