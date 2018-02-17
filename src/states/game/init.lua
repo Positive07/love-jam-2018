@@ -4,7 +4,7 @@ local World = require("src.world")
 
 local Object = require("src.classes.object")
 
-Object({
+local o = Object({
    position = Vector(100, 100),
    velocity = Vector(20, 20),
    size     = Vector(64, 64),
@@ -28,6 +28,8 @@ local Game = {}
 
 function Game:init()
    love.graphics.setBackgroundColor(225, 225, 225)
+
+   Game.camera = require("src.states.game.camera")
 end
 
 function Game:update(propagate, dt)
@@ -35,21 +37,27 @@ function Game:update(propagate, dt)
       Object.dyanmicList:get(i):update(dt)
    end
 
+   Game.camera:setPosition(o.position.x, o.position.y)
+
    propagate(dt)
 end
 
 function Game:draw(propagate)
-   love.graphics.setColor(255, 255, 255)
-   for i = 1, Object.list.size do
-      Object.list:get(i):draw()
-   end
+   Game.camera:attach()
+      love.graphics.setColor(255, 255, 255)
+      for i = 1, Object.list.size do
+         Object.list:get(i):draw()
+      end
 
-   love.graphics.setColor(225, 30, 30)
-   local items, len = World:getItems()
-   for i = 1, len do
-      local x, y, w, h = World:getRect(items[i])
-      --love.graphics.rectangle("line", x, y, w, h)
-   end
+      love.graphics.setColor(225, 30, 30)
+      local items, len = World:getItems()
+      for i = 1, len do
+         local x, y, w, h = World:getRect(items[i])
+         --love.graphics.rectangle("line", x, y, w, h)
+      end
+   Game.camera:detach()
+
+   Game.camera:draw()
 
    propagate()
 end
