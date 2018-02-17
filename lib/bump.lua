@@ -31,7 +31,7 @@ local bump = {}
 ------------------------------------------
 -- Auxiliary functions
 ------------------------------------------
-local class = require "libs.class"
+local class = require "lib.class"
 
 local DELTA = 1e-10 -- floating-point margin of error
 

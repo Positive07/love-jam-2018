@@ -101,6 +101,16 @@ function vector.__le(a,b)
 	return a.x <= b.x and a.y <= b.y
 end
 
+function vector:set(a, b)
+	if isvector(a) then
+		self.x = a.x
+		self.y = a.y
+	else
+		self.x = a
+		self.y = b or a
+	end
+end
+
 function vector:add(a, b)
 	if isvector(a) then
 		self.x = self.x + a.x
