@@ -17,6 +17,11 @@ function Object:initialize(t)
    self.filter     = t and t.filter
    self.isGrounded = false
 
+   self.groundFrictionCoef = 100
+   self.airFrictionCoef    = 20
+
+   self.sprite = t and t.sprite
+
    self.dynamic = t and t.dynamic
 
    self:checkBody()
@@ -73,6 +78,24 @@ function Object:applyGravity(dt)
    self.velocity:add(World.gravity * dt)
 end
 
+function Object:applyFriction(dt)
+   if self.isGrounded then
+      local friction = self.velocity.x
+      friction = friction - 1
+      friction = friction * self.groundFrictionCoef
+      friction = friction * dt
+
+      self.velocity.x = self.velocity.x - friction * dt
+   end
+
+   local friction = self.velocity:clone()
+   friction:mul(-1)
+   friction:normalizeInplace()
+   friction:mul(self.airFrictionCoef)
+   friction:mul(dt)
+   self.velocity:add(friction)
+end
+
 function Object:resolveCollision(col)
    if col.normal.x ~= 0 then
       self.velocity.x = 0
@@ -88,15 +111,22 @@ function Object:resolveCollision(col)
 end
 
 function Object:update(dt)
-   self.isGrounded = false
-
    self:checkBody()
    self:applyGravity(dt)
+   self:applyFriction(dt)
+
+   self.isGrounded = false
    self:move(dt)
 end
 
 function Object:draw()
-   love.graphics.rectangle("fill", self.position.x - self.size.x/2, self.position.y - self.size.y/2, self.size.x, self.size.y)
+   if self.sprite then
+      love.graphics.draw(self.sprite, self.position.x, self.position.y, nil, nil, nil, self.sprite:getWidth()/2, self.sprite:getHeight()/2)
+   else
+      love.graphics.rectangle("fill", math.floor(self.position.x - self.size.x/2), math.floor(self.position.y - self.size.y/2), self.size.x, self.size.y)
+   end
+
+   love.graphics.print(string.format("Position: %d, %d\nVelocity: %d, %d\nGrounded: %s", self.position.x, self.position.y, self.velocity.x, self.velocity.y, self.isGrounded), self.position.x + self.size.x/2, self.position.y - self.size.y/2)
 end
 
 return Object

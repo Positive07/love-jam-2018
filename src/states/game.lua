@@ -7,13 +7,28 @@ local Object = require("src.classes.object")
 Object({
    position = Vector(100, 100),
    velocity = Vector(20, 20),
-   size     = Vector(50, 50),
+   size     = Vector(64, 64),
 
-   body    = true,
+   hasBody = true,
    dynamic = true,
+
+   sprite = love.graphics.newImage("assets/cube.png"),
+})
+
+Object({
+   position = Vector(100, 400),
+   velocity = Vector(0, 0),
+   size     = Vector(300, 50),
+
+   hasBody = true,
+   dynamic = false,
 })
 
 local Game = {}
+
+function Game:init()
+   love.graphics.setBackgroundColor(225, 225, 225)
+end
 
 function Game:update(propagate, dt)
    for i = 1, Object.dyanmicList.size do
@@ -33,7 +48,7 @@ function Game:draw(propagate)
    local items, len = World:getItems()
    for i = 1, len do
       local x, y, w, h = World:getRect(items[i])
-      love.graphics.rectangle("line", x, y, w, h)
+      --love.graphics.rectangle("line", x, y, w, h)
    end
 
    propagate()
