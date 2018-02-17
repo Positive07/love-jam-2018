@@ -13,8 +13,9 @@ function Object:initialize(t)
    self.velocity = t and t.velocity or Vector(0, 0)
    self.size     = t and t.size     or Vector(0, 0)
 
-   self.body   = t and t.body
-   self.filter = t and t.filter
+   self.hasBody    = t and t.hasBody
+   self.filter     = t and t.filter
+   self.isGrounded = false
 
    self.dynamic = t and t.dynamic
 
@@ -42,7 +43,7 @@ function Object:removeBody()
 end
 
 function Object:checkBody()
-   if self.body then
+   if self.hasBody then
       if not World:hasItem(self) then
          self:addBody()
       end
@@ -58,7 +59,7 @@ end
 function Object:move(dt)
    self.position:add(self.velocity * dt)
 
-   if self.body then
+   if self.hasBody then
       local nx, ny, cols, len = World:move(self, self.position.x - self.size.x/2, self.position.y - self.size.y/2)
       self.position.x, self.position.y = nx + self.size.x/2, ny + self.size.y/2
 
@@ -68,11 +69,29 @@ function Object:move(dt)
    end
 end
 
+function Object:applyGravity(dt)
+   self.velocity:add(World.gravity * dt)
+end
+
 function Object:resolveCollision(col)
+   if col.normal.x ~= 0 then
+      self.velocity.x = 0
+   end
+
+   if col.normal.y ~= 0 then
+      self.velocity.y = 0
+
+      if col.normal.y == -1 then
+         self.isGrounded = true
+      end
+   end
 end
 
 function Object:update(dt)
+   self.isGrounded = false
+
    self:checkBody()
+   self:applyGravity(dt)
    self:move(dt)
 end
 
