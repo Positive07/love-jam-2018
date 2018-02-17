@@ -53,14 +53,20 @@ function SpriteRenderer:draw()
 
    love.graphics.setColor(255, 255, 255)
 
-   local e
    for i = 1, self.pool.size do
       local e = self.pool:get(i)
 
       local transform = e:get(C.transform)
       local sprite    = e:get(C.sprite)
 
-      self.batch:set(sprite.id, sprite.quad, transform.position.x, transform.position.y, nil, nil, nil, sprite.origin.x, sprite.origin.y)
+      self.batch:set(
+        sprite.id,
+        sprite.quad,
+        transform.position.x, transform.position.y,
+        nil,
+        nil, nil,
+        sprite.origin.x, sprite.origin.y
+      )
    end
 
    love.graphics.setCanvas(self.buffer)
