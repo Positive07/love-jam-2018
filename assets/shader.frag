@@ -17,5 +17,5 @@ vec4 effect(vec4 c, Image texture, vec2 tex_coords, vec2 screen_coords) {
 
   //c.rgb = mix(color, c.rgb, mix(1, pow(v, thickness), opacity));
   c.rgb -= (color - c.rgb) * (pow(v,thickness) - 1.0) * opacity;
-  return c
+  return c;
 }

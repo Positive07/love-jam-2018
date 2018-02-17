@@ -1,4 +1,5 @@
 love.graphics.setDefaultFilter("nearest", "nearest")
+love.graphics.setBackgroundColor(255, 255, 255)
 
 local Fluid = require("lib.fluid").init({
    useEvents = true

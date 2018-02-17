@@ -7,17 +7,26 @@ local SpriteRenderer = Fluid.system({C.transform, C.sprite})
 function SpriteRenderer:init()
    self.atlas = love.graphics.newImage("assets/tileset.png")
    self.batch = love.graphics.newSpriteBatch(self.atlas, 10000)
-
-   self.camera = Camera.new()
-   self.buffer = love.graphics.newCanvas(love.graphics.getDimensions())
-   --self.shader = love.graphics.newShader("assets/shader.frag")
-
-   self.open = {}
+   self.open  = {}
 
    for i = 1, 10000 do
       self.batch:add(nil, nil, nil, 0, 0)
       self.open[i] = i
    end
+
+
+   self.camera = Camera.new()
+   self.buffer = love.graphics.newCanvas(love.graphics.getDimensions())
+   self.shader = love.graphics.newShader("assets/shader.frag")
+
+   self.camera:zoomTo(1)
+
+   self.shader:send("width", 1)
+   self.shader:send("phase", 0)
+   self.shader:send("thickness", 1)
+   self.shader:send("opacity", 0.6)
+   self.shader:send("color", {0, 0, 0})
+   self.shader:send("direction", {1 / love.graphics.getWidth(), 2 / love.graphics.getHeight()})
 end
 
 function SpriteRenderer:entityAdded(e)
@@ -62,9 +71,11 @@ function SpriteRenderer:draw()
       self.camera:detach()
    love.graphics.setCanvas()
 
-   --love.graphics.setShader(self.shader)
-      love.graphics.draw(self.buffer)
-   --love.graphics.setShader()
+   love.graphics.setShader(self.shader)
+   love.graphics.setBlendMode("alpha", "premultiplied")
+   love.graphics.draw(self.buffer)
+   love.graphics.setBlendMode("alpha")
+   love.graphics.setShader()
 end
 
 return SpriteRenderer
