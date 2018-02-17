@@ -1,4 +1,5 @@
-local Fluid = require("lib.fluid")
+local Fluid  = require("lib.fluid")
+local Camera = require("lib.camera")
 
 local C = require("src.components")
 
@@ -7,8 +8,9 @@ function SpriteRenderer:init()
    self.atlas = love.graphics.newImage("assets/tileset.png")
    self.batch = love.graphics.newSpriteBatch(self.atlas, 10000)
 
-   --self.camera =
-   --self.shader =
+   self.camera = Camera.new()
+   self.buffer = love.graphics.newCanvas(love.graphics.getDimensions())
+   --self.shader = love.graphics.newShader("assets/shader.frag")
 
    self.open = {}
 
@@ -52,7 +54,17 @@ function SpriteRenderer:draw()
       self.batch:set(sprite.id, sprite.quad, transform.position.x, transform.position.y, nil, nil, nil, sprite.origin.x, sprite.origin.y)
    end
 
-   love.graphics.draw(self.batch)
+   love.graphics.setCanvas(self.buffer)
+      love.graphics.clear(love.graphics.getBackgroundColor())
+
+      self.camera:attach()
+         love.graphics.draw(self.batch)
+      self.camera:detach()
+   love.graphics.setCanvas()
+
+   --love.graphics.setShader(self.shader)
+      love.graphics.draw(self.buffer)
+   --love.graphics.setShader()
 end
 
 return SpriteRenderer
