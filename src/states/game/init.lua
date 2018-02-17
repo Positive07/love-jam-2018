@@ -1,4 +1,5 @@
 local Vector = require("libs.vector")
+local Wave   = require("libs.wave")
 
 local World = require("src.world")
 
@@ -23,7 +24,7 @@ Object({
    dynamic = false,
 })
 
-Cube({
+local cube = Cube({
    position = Vector(200, 200),
    size = Vector(48, 48),
 
@@ -42,6 +43,16 @@ function Game:init()
    Game.camera:zoomTo(1)
 
    Game.flux = require("src.states.game.flux")
+
+   Game.music = Wave:newSource("music/boss_song_1.wav", "static")
+
+   Game.music:setIntensity(20)
+   Game.music:setBPM(70)
+   Game.music:onBeat(function()
+      cube:move()
+   end)
+
+   Game.music:play()
 end
 
 function Game:update(propagate, dt)
@@ -52,6 +63,7 @@ function Game:update(propagate, dt)
    Game.camera:lookAt(o.position.x, o.position.y)
 
    Game.flux:update(dt)
+   Game.music:update(dt)
 
    propagate(dt)
 end

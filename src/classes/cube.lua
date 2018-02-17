@@ -15,23 +15,25 @@ function Cube:initialize(t)
 
    self.maxTimeMove  = t.maxTimeMove or 2
    self.timeLeftMove = self.maxTimeMove
-   self.moveSpeed    = t.moveSpeed or 1
+   self.moveSpeed    = t.moveSpeed or 0.125
    self.direction    = t.direction or Vector.right
 
    Object.initialize(self, t)
 end
 
 function Cube:move()
-   Flux:to(self.position, self.moveSpeed, {x = self.position.x + self.size.x * self.direction.x, y = self.position.y + self.size.y * self.direction.y}):ease("elasticout")
+   Flux:to(self.position, self.moveSpeed, {x = self.position.x + self.size.x * self.direction.x, y = self.position.y + self.size.y * self.direction.y}):ease("quadout")
 end
 
 function Cube:update(dt)
+   --[[
    self.timeLeftMove = self.timeLeftMove - dt
 
    if self.timeLeftMove <= 0 then
       self:move()
       self.timeLeftMove = self.maxTimeMove
    end
+   ]]
 
    local nx, ny, cols, len = World:move(self, self.position.x - self.size.x/2, self.position.y - self.size.y/2, self.filter)
    self.position.x, self.position.y = nx + self.size.x/2, ny + self.size.y/2
