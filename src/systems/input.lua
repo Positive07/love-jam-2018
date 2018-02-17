@@ -11,11 +11,12 @@ function Input:entityAdded(e)
       controls = {
          left = {'key:left', 'axis:leftx-', 'button:dpleft'},
          right = {'key:right', 'axis:leftx+', 'button:dpright'},
+         up = {'key:up', 'axis:lefty-', 'button:dpup'},
          down = {'key:down', 'axis:lefty+', 'button:dpdown'},
-         jump = {'key:up', 'button:a'},
+         jump = {'key:x', 'button:a'},
       },
       pairs = {
-         move = {'left', 'right', 'down'}
+         move = {'left', 'right', 'up', 'down'}
       },
    })
 end
