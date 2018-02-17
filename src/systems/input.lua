@@ -9,13 +9,11 @@ function Input:update(dt)
    for i = 1, self.pool.size do
       e = self.pool:get(i)
 
-      local controls      = e:get(C.controls)
-      local inputResponse = e:get(C.inputResponse)
+      local input = e:get(C.controls).input
+      input:update()
 
-      for action, key in pairs(controls) do
-         if love.keyboard.isDown(key) then
-            inputResponse[action](e, dt)
-         end
+      for _, response in pairs(e:get(C.inputResponse)) do
+         response(e, input, dt)
       end
    end
 end

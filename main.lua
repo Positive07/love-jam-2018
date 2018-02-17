@@ -54,8 +54,20 @@ local Player = Fluid.entity()
 :give(C.sprite)
 :give(C.body, Vector(0, 0), nil, nil, 1)
 :give(C.collider)
-:give(C.controls)
-:give(C.inputResponse)
+:give(C.controls, {
+   controls = {
+      left  = {'key:left', 'axis:leftx-', 'button:dpleft'},
+      right = {'key:right', 'axis:leftx+', 'button:dpright'},
+      up    = {'key:up', 'axis:lefty-', 'button:dpup'},
+      down  = {'key:down', 'axis:lefty+', 'button:dpdown'},
+      jump  = {'key:x', 'button:a'},
+   },
+   pairs = {
+      move = {'left', 'right', 'up', 'down'}
+   },
+   joystick = love.joystick.getJoysticks()[1],
+})
+:give(C.inputResponse) --basicResponses
 :give(C.moveSpeed, 300)
 :give(C.jumpForce, 400)
 
