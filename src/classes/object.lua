@@ -19,7 +19,7 @@ function Object:initialize(t)
 
    self.groundFrictionCoef = 100
    self.airFrictionCoef    = 20
-   self.epsilon            = 0.6
+   self.epsilon            = 0.75
 
    self.sprite = t and t.sprite
 
@@ -96,8 +96,8 @@ function Object:applyFriction(dt)
    friction:mul(dt)
    self.velocity:add(friction)
 
-   if self.velocity:len() > -self.epsilon and self.velocity:len() < self.epsilon then
-      self.velocity:set(0, 0)
+   if self.velocity.x > -self.epsilon and self.velocity.x < self.epsilon then
+      self.velocity.x = 0
    end
 end
 

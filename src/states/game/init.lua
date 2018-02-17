@@ -27,9 +27,10 @@ Object({
 local Game = {}
 
 function Game:init()
-   love.graphics.setBackgroundColor(225, 225, 225)
+   love.graphics.setBackgroundColor(30, 30, 30)
 
    Game.camera = require("src.states.game.camera")
+   Game.camera:zoomTo(2)
 end
 
 function Game:update(propagate, dt)
@@ -37,7 +38,7 @@ function Game:update(propagate, dt)
       Object.dyanmicList:get(i):update(dt)
    end
 
-   Game.camera:setPosition(o.position.x, o.position.y)
+   Game.camera:lookAt(o.position.x, o.position.y)
 
    propagate(dt)
 end
@@ -53,11 +54,9 @@ function Game:draw(propagate)
       local items, len = World:getItems()
       for i = 1, len do
          local x, y, w, h = World:getRect(items[i])
-         --love.graphics.rectangle("line", x, y, w, h)
+         love.graphics.rectangle("line", x, y, w, h)
       end
    Game.camera:detach()
-
-   Game.camera:draw()
 
    propagate()
 end
