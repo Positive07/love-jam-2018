@@ -42,8 +42,10 @@ function Object:removeBody()
 end
 
 function Object:checkBody()
-   if body and not World:hasItem(self) then
-      self:addBody()
+   if self.body then
+      if not World:hasItem(self) then
+         self:addBody()
+      end
    elseif World:hasItem(self) then
       self:removeBody()
    end
@@ -71,10 +73,11 @@ end
 
 function Object:update(dt)
    self:checkBody()
+   self:move(dt)
 end
 
 function Object:draw()
-   love.graphics.rectangle("fill", self.position.x, self.position.y, self.size.x, self.size.y)
+   love.graphics.rectangle("fill", self.position.x - self.size.x/2, self.position.y - self.size.y/2, self.size.x, self.size.y)
 end
 
 return Object

@@ -279,7 +279,7 @@ function Manager.registerCallbacks(callbacks)
 
       love[f] = function (...)
          old(...)
-         delegate(f, ...)
+         delegate(f, nil, ...)
          if f == 'draw' then Manager.performChanges() end
       end
    end
