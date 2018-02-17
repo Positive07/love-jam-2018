@@ -52,14 +52,20 @@ function Camera:setViewport (w, h)
 end
 
 function Camera:renderTo (render, ...)
-  love.graphics.push("all")
-  love.graphics.setCanvas(self.canvas)
-
-  love.graphics.translate(-self.tx, -self.ty)
-
+  self:attach()
   render(self.tx, self.ty, self.w, self.h, ...)
+  self:detach()
+end
 
-  love.graphics.pop()
+function Camera:attach()
+   love.graphics.push("all")
+   love.graphics.setCanvas(self.canvas)
+   love.graphics.clear()
+   love.graphics.translate(-self.tx, -self.ty)
+end
+
+function Camera:detach()
+   love.graphics.pop()
 end
 
 function Camera:draw ()
