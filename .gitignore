@@ -63,6 +63,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # VSCode
-*.code-workspace¨
+*.code-workspace
 .vscode
 .vscode/*
