@@ -13,16 +13,21 @@ function Cube:initialize(t)
 
    t.size = t.size or Vector(64, 64)
 
-   self.maxTimeMove  = t.maxTimeMove or 2
-   self.timeLeftMove = self.maxTimeMove
-   self.moveSpeed    = t.moveSpeed or 0.125
-   self.direction    = t.direction or Vector.right
+   self.moveSpeed = t.moveSpeed or 0.125
+   self.direction = t.direction or Vector.right
 
    Object.initialize(self, t)
 end
 
+function Cube:resolveCollision(col)
+   col.other:destroy() -- TODO Make this less destructive
+end
+
 function Cube:move()
-   Flux:to(self.position, self.moveSpeed, {x = self.position.x + self.size.x * self.direction.x, y = self.position.y + self.size.y * self.direction.y}):ease("quadout")
+   Flux:to(self.position, self.moveSpeed, {
+      x = self.position.x + self.size.x * self.direction.x,
+      y = self.position.y + self.size.y * self.direction.y}
+   ):ease("quadout")
 end
 
 function Cube:update(dt)

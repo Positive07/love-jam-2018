@@ -2,36 +2,62 @@ local Vector = require("libs.vector")
 local Wave   = require("libs.wave")
 
 local World = require("src.world")
+local Batch = require("src.states.game.batch")
 
 local Object = require("src.classes.object")
+local Player = require("src.classes.player")
 local Cube   = require("src.classes.cube")
 
-local o = Object({
-   position = Vector(100, 100),
-   velocity = Vector(20, 20),
-   size     = Vector(64, 64),
-
-   hasBody = true,
-   dynamic = true,
-})
-
-Object({
-   position = Vector(100, 400),
-   velocity = Vector(0, 0),
-   size     = Vector(300, 50),
-
-   hasBody = true,
-   dynamic = false,
+local player = Player({
+   position = Vector(0, 0),
 })
 
 local cube = Cube({
-   position = Vector(200, 200),
+   position = Vector(100, 200),
    size = Vector(48, 48),
 
    hasBody = true,
    dynamic = true,
 
-   sprite = love.graphics.newImage("assets/cube.png"),
+   quad = Batch.quads["cube"],
+})
+
+for x = 1, 8 do
+   for y = 1, 8 do
+      Object({
+         position = Vector(252 + (x * 32), 100 + (y * 32)),
+         size = Vector(32, 32),
+
+         quad = Batch.quads["pattern"],
+         hasBody = true,
+      })
+   end
+end
+
+Object({
+   position = Vector(0, 200),
+   size = Vector(32, 16),
+
+   quad = Batch.quads["pillar_top"],
+   hasBody = true,
+})
+
+for i = 1, 10 do
+   Object({
+      position = Vector(0, 200 + i * 16),
+      size = Vector(32, 16),
+
+      quad = Batch.quads["pillar_mid"],
+      hasBody = true,
+   })
+end
+
+Object({
+   position = Vector(0, 376),
+   size = Vector(32, 16),
+
+   quad = Batch.quads["pillar_bot"],
+   hasBody = true,
 })
 
 local Game = {}
@@ -40,7 +66,7 @@ function Game:init()
    love.graphics.setBackgroundColor(30, 30, 30)
 
    Game.camera = require("src.states.game.camera")
-   Game.camera:zoomTo(1)
+   Game.camera:zoomTo(2)
 
    Game.flux = require("src.states.game.flux")
 
@@ -62,7 +88,7 @@ function Game:update(propagate, dt)
       Object.dyanmicList:get(i):update(dt)
    end
 
-   Game.camera:lookAt(o.position.x, o.position.y)
+   Game.camera:lookAt(player.position.x, player.position.y)
 
    Game.flux:update(dt)
    Game.music:update(dt)

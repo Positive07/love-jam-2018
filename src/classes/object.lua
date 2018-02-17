@@ -20,12 +20,12 @@ function Object:initialize(t)
    self.filter     = t.filter
    self.isGrounded = false
 
+   self.gravityScale       = t.gravityScale or 1
    self.groundFrictionCoef = 100
    self.airFrictionCoef    = 20
    self.epsilon            = 0.75
 
-   self.sprite   = t.sprite
-   self.spriteID = nil
+   self.quad = t.quad
 
    self.dynamic = t.dynamic
 
@@ -41,6 +41,10 @@ function Object:destroy()
    Object.list:remove(self)
    if self.dynamic then
       Object.dyanmicList:remove(self)
+   end
+
+   if self.hasBody then
+      self:removeBody()
    end
 end
 
@@ -80,7 +84,7 @@ function Object:move(dt)
 end
 
 function Object:applyGravity(dt)
-   self.velocity:add(World.gravity * dt)
+   self.velocity:add(World.gravity * self.gravityScale * dt)
 end
 
 function Object:applyFriction(dt)
@@ -129,13 +133,10 @@ function Object:update(dt)
 end
 
 function Object:draw()
-   if self.sprite then
-      self.spriteID = Batch.draw(self.spriteID, self.position.x, self.position.y, nil, nil, nil, self.sprite:getWidth()/2, self.sprite:getHeight()/2)
-   else
-      love.graphics.rectangle("fill", math.floor(self.position.x - self.size.x/2), math.floor(self.position.y - self.size.y/2), self.size.x, self.size.y)
+   if self.quad then
+      local _, _, w, h = self.quad:getViewport()
+      Batch.draw(self.quad, self.position.x, self.position.y, nil, nil, nil, w/2, h/2)
    end
-
-   love.graphics.print(string.format("Position: %d, %d\nVelocity: %d, %d\nGrounded: %s", self.position.x, self.position.y, self.velocity.x, self.velocity.y, self.isGrounded), self.position.x + self.size.x/2, self.position.y - self.size.y/2)
 end
 
 return Object

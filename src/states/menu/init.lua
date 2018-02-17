@@ -6,7 +6,7 @@ function Menu:update(propagate, dt)
 end
 
 function Menu:draw(propagate)
-
+   
    propagate()
 end
 
