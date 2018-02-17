@@ -5,21 +5,12 @@ local MoveSpeed = require("src.components.moveSpeed")
 local JumpForce = require("src.components.jumpForce")
 local Grounded  = require("src.components.grounded")
 
-local defLeft = function(e, dt)
+local defMove = function(e, x, y, dt)
    local body      = e:get(Body)
    local moveSpeed = e:get(MoveSpeed)
 
    if body and moveSpeed then
-      body.velocity.x = body.velocity.x - moveSpeed.speed * dt
-   end
-end
-
-local defRight = function(e, dt)
-   local body      = e:get(Body)
-   local moveSpeed = e:get(MoveSpeed)
-
-   if body and moveSpeed then
-      body.velocity.x = body.velocity.x + moveSpeed.speed * dt
+      body.velocity.x = body.velocity.x + moveSpeed.speed * x * dt
    end
 end
 
@@ -33,10 +24,9 @@ local defJump = function(e, dt)
    end
 end
 
-local InputResponse = Fluid.component(function(e, left, right, jump)
-   e.left  = left  or defLeft
-   e.right = right or defRight
-   e.jump  = jump  or defJump
+local InputResponse = Fluid.component(function(e, move, jump)
+   e.move  = move or defMove
+   e.jump  = jump or defJump
 end)
 
 return InputResponse

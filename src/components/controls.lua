@@ -1,9 +1,8 @@
 local Fluid = require("lib.fluid")
 
-local Controls = Fluid.component(function(e, left, right, jump)
-   e.left  = left  or "left"
-   e.right = right or "right"
-   e.jump  = jump  or "up"
+local Controls = Fluid.component(function(e, controls)
+   e.controls = controls
+   e.input    = nil
 end)
 
 return Controls
