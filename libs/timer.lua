@@ -1,27 +1,30 @@
 --[[
-Copyright (c) 2010-2013 Matthias Richter
+	Hump.Timer v1.0.0: A timer library
+	<http://hump.readthedocs.io/en/latest/timer.html>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+	MIT License - Copyright (c) 2010-2013 Matthias Richter
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
 
-Except as contained in this notice, the name(s) of the above copyright holders
-shall not be used in advertising or otherwise to promote the sale, use or
-other dealings in this Software without prior written authorization.
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+	Except as contained in this notice, the name(s) of the above copyright holders
+	shall not be used in advertising or otherwise to promote the sale, use or
+	other dealings in this Software without prior written authorization.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	THE SOFTWARE.
 ]]--
 
 local Timer = {}
@@ -74,7 +77,7 @@ function Timer:after(delay, func)
 end
 
 function Timer:every(delay, after, count)
-	local count = count or math.huge -- exploit below: math.huge - 1 = math.huge
+	count = count or math.huge -- exploit below: math.huge - 1 = math.huge
 	local handle = { time = 0, during = _nothing_, after = after, limit = delay, count = count }
 	self.functions[handle] = true
 	return handle
@@ -134,16 +137,16 @@ Timer.tween = setmetatable({
 -- register new tween
 __call = function(tween, self, len, subject, target, method, after, ...)
 	-- recursively collects fields that are defined in both subject and target into a flat list
-	local function tween_collect_payload(subject, target, out)
-		for k,v in pairs(target) do
-			local ref = subject[k]
+	local function tween_collect_payload(sub, tar, out)
+		for k,v in pairs(tar) do
+			local ref = sub[k]
 			assert(type(v) == type(ref), 'Type mismatch in field "'..k..'".')
 			if type(v) == 'table' then
 				tween_collect_payload(ref, v, out)
 			else
 				local ok, delta = pcall(function() return (v-ref)*1 end)
 				assert(ok, 'Field "'..k..'" does not support arithmetic operations')
-				out[#out+1] = {subject, k, delta}
+				out[#out+1] = {sub, k, delta}
 			end
 		end
 		return out
@@ -204,7 +207,7 @@ end
 module.tween = setmetatable({}, {
 	__index = Timer.tween,
 	__newindex = function(k,v) Timer.tween[k] = v end,
-	__call = function(t, ...) return default:tween(...) end,
+	__call = function(_, ...) return default:tween(...) end,
 })
 
 return setmetatable(module, {__call = Timer.new})

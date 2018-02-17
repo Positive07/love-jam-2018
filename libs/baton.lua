@@ -1,5 +1,6 @@
 --[[
-   Baton: Input library for LÖVE <https://github.com/tesselode/baton>
+   Baton v0.0.0: Input library for LÖVE
+   <https://github.com/tesselode/baton>
 
    MIT License - Copyright (c) 2018 Andrew Minnich
 

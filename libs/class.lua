@@ -1,6 +1,7 @@
 --[[
-   Middleclass v4.1.0: Object Orientation for Lua <https://github.com/kikito/middleclass>
-   
+   Middleclass v4.1.0: Object Orientation for Lua
+   <https://github.com/kikito/middleclass>
+
    MIT LICENSE - Copyright (c) 2011 Enrique García Cota
 
    Permission is hereby granted, free of charge, to any person obtaining a

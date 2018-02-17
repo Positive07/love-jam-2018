@@ -1,5 +1,6 @@
 --[[
-   Camera: Basic pixelart camera library <https://github.com/Positive07/love-jam-2018>
+   Camera v0.0.0: Basic pixelart camera library
+   <https://github.com/Positive07/love-jam-2018>
 
    MIT License - Copyright (c) 2018 Pablo A. Mayobre
 
