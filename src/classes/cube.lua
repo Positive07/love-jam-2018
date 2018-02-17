@@ -13,14 +13,17 @@ function Cube:initialize(t)
 
    t.size = t.size or Vector(64, 64)
 
-   self.moveSpeed = t.moveSpeed or 0.125
-   self.direction = t.direction or Vector.right
-
    Object.initialize(self, t)
+
+   self.moveSpeed = t.moveSpeed or 0.125
+   self.direction = t.direction or Vector.up
+
+   self.prefPos  = self.position:clone()
+   self.attached = {}
 end
 
 function Cube:resolveCollision(col)
-   col.other:destroy() -- TODO Make this less destructive
+   --col.other:destroy() -- TODO Make this less destructive
 end
 
 function Cube:move()
@@ -37,6 +40,14 @@ function Cube:update(dt)
    for i = 1, len do
       self:resolveCollision(cols[i])
    end
+
+   local delta = self.position:clone() - self.prefPos
+   for other, _ in pairs(self.attached) do
+      other.position:add(delta)
+      self.attached[other] = nil
+   end
+
+   self.prefPos = self.position:clone()
 end
 
 return Cube

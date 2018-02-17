@@ -27,7 +27,6 @@ function buildQuads()
          local y = (y * 16)
 
          quads["tile_"..i] = love.graphics.newQuad(x, y, 16, 16, sw, sh)
-         print("Tile: " ..i)
       end
    end
 
@@ -42,7 +41,7 @@ end
 function Batch.render()
    love.graphics.setColor(255, 255, 255, 255)
    love.graphics.draw(Batch.batch)
-   
+
    Batch.batch:clear()
 end
 

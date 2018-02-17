@@ -45,7 +45,7 @@ Object({
 for i = 1, 10 do
    Object({
       position = Vector(0, 200 + i * 16),
-      size = Vector(32, 16),
+      size = Vector(16, 16),
 
       quad = Batch.quads["pillar_mid"],
       hasBody = true,
@@ -59,6 +59,16 @@ Object({
    quad = Batch.quads["pillar_bot"],
    hasBody = true,
 })
+
+for i = 1, 10 do
+   Object({
+      position = Vector(i * 32, 400),
+      size = Vector(32, 32),
+
+      quad = Batch.quads["pattern"],
+      hasBody = true,
+   })
+end
 
 local Game = {}
 

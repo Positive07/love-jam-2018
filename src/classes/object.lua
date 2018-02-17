@@ -21,8 +21,8 @@ function Object:initialize(t)
    self.isGrounded = false
 
    self.gravityScale       = t.gravityScale or 1
-   self.groundFrictionCoef = 100
-   self.airFrictionCoef    = 20
+   self.groundFrictionCoef = 250
+   self.airFrictionCoef    = 100
    self.epsilon            = 0.75
 
    self.quad = t.quad
@@ -119,6 +119,9 @@ function Object:resolveCollision(col)
 
       if col.normal.y == -1 then
          self.isGrounded = true
+         if col.other.attached then
+            col.other.attached[self] = true
+         end
       end
    end
 end
