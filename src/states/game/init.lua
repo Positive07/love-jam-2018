@@ -3,6 +3,7 @@ local Vector = require("libs.vector")
 local World = require("src.world")
 
 local Object = require("src.classes.object")
+local Cube   = require("src.classes.cube")
 
 local o = Object({
    position = Vector(100, 100),
@@ -11,8 +12,6 @@ local o = Object({
 
    hasBody = true,
    dynamic = true,
-
-   sprite = love.graphics.newImage("assets/cube.png"),
 })
 
 Object({
@@ -24,13 +23,25 @@ Object({
    dynamic = false,
 })
 
+Cube({
+   position = Vector(200, 200),
+   size = Vector(48, 48),
+
+   hasBody = true,
+   dynamic = true,
+
+   sprite = love.graphics.newImage("assets/cube.png"),
+})
+
 local Game = {}
 
 function Game:init()
    love.graphics.setBackgroundColor(30, 30, 30)
 
    Game.camera = require("src.states.game.camera")
-   Game.camera:zoomTo(2)
+   Game.camera:zoomTo(1)
+
+   Game.flux = require("src.states.game.flux")
 end
 
 function Game:update(propagate, dt)
@@ -39,6 +50,8 @@ function Game:update(propagate, dt)
    end
 
    Game.camera:lookAt(o.position.x, o.position.y)
+
+   Game.flux:update(dt)
 
    propagate(dt)
 end

@@ -9,21 +9,23 @@ Object.list        = List()
 Object.dyanmicList = List()
 
 function Object:initialize(t)
-   self.position = t and t.position or Vector(0, 0)
-   self.velocity = t and t.velocity or Vector(0, 0)
-   self.size     = t and t.size     or Vector(0, 0)
+   t = t or {}
 
-   self.hasBody    = t and t.hasBody
-   self.filter     = t and t.filter
+   self.position = t.position or Vector(0, 0)
+   self.velocity = t.velocity or Vector(0, 0)
+   self.size     = t.size     or Vector(0, 0)
+
+   self.hasBody    = t.hasBody
+   self.filter     = t.filter
    self.isGrounded = false
 
    self.groundFrictionCoef = 100
    self.airFrictionCoef    = 20
    self.epsilon            = 0.75
 
-   self.sprite = t and t.sprite
+   self.sprite = t.sprite
 
-   self.dynamic = t and t.dynamic
+   self.dynamic = t.dynamic
 
    self:checkBody()
 
@@ -66,7 +68,7 @@ function Object:move(dt)
    self.position:add(self.velocity * dt)
 
    if self.hasBody then
-      local nx, ny, cols, len = World:move(self, self.position.x - self.size.x/2, self.position.y - self.size.y/2)
+      local nx, ny, cols, len = World:move(self, self.position.x - self.size.x/2, self.position.y - self.size.y/2, self.filter)
       self.position.x, self.position.y = nx + self.size.x/2, ny + self.size.y/2
 
       for i = 1, len do
