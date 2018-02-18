@@ -19,7 +19,10 @@ function SpriteRenderer:init()
    self.buffer = love.graphics.newCanvas(love.graphics.getDimensions())
    self.shader = love.graphics.newShader("assets/shader.frag")
 
-   self.camera:zoomTo(1)
+   self.target = nil
+
+   self.camera:zoomTo(2)
+
 
    self.shader:send("width", 1)
    self.shader:send("phase", 0)
@@ -49,6 +52,14 @@ local function sort(a, b)
 end
 
 function SpriteRenderer:draw()
+   if self.target then
+      local transform = self.target:get(C.transform)
+
+      if transform then
+         self.camera:lookAt(transform.position.x, transform.position.y)
+      end
+   end
+
    table.sort(self.pool, sort)
 
    love.graphics.setColor(255, 255, 255)

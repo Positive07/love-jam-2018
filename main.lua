@@ -14,14 +14,15 @@ local S = require("src.systems")
 local Game = require("src.instances.game")
 Fluid.addInstance(Game)
 
-local collision = S.collision()
+local collision      = S.collision()
+local spriteRenderer = S.spriteRenderer()
 
 Game:addSystem(S.physics(), "update")
 Game:addSystem(collision, "update")
 Game:addSystem(S.input(), "update")
 Game:addSystem(S.onBeatMover("music/boss_song_1.wav", 140), "update")
 
-Game:addSystem(S.spriteRenderer(), "draw")
+Game:addSystem(spriteRenderer, "draw")
 Game:addSystem(collision, "draw")
 
 for i = 1, 20 do
@@ -42,6 +43,18 @@ local Cube = Fluid.entity()
 :give(C.moveOnBeat, Vector.right)
 
 Game:addEntity(Cube)
+
+local adds = {"", "_l", "_r", "_u", "_d", "_lit", "_lit_l", "_lit_r", "_lit_u", "_lit_d"}
+
+for i = 1, #adds do
+   local Lantern = Fluid.entity()
+   :give(C.transform, Vector(10 + i * 20, 200), Vector(16, 32))
+   :give(C.sprite, Quads["lantern"..adds[i]])
+   :give(C.collider)
+   :give(C.moveOnBeat, Vector.down)
+   print("lantern"..adds[i])
+   Game:addEntity(Lantern)
+end
 
 
 local Floor = Fluid.entity()
@@ -73,3 +86,5 @@ local Player = Fluid.entity()
 :give(C.jumpForce, 400)
 
 Game:addEntity(Player)
+
+spriteRenderer.target = Player
