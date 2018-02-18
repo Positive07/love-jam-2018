@@ -7,23 +7,23 @@ local Grounded  = require("src.components.grounded")
 
 local basicResponses = {}
 
-function basicResponses.move (e, input, dt)
+function basicResponses.move(e, input, dt)
    local body      = e:get(Body)
    local moveSpeed = e:get(MoveSpeed)
 
    if body and moveSpeed then
-      local multiplier = input:get('move') * dt
+      local multiplier = input:get("move") * dt
       body.velocity.x = body.velocity.x + moveSpeed.speed * multiplier
    end
 end
 
-function basicResponses.jump (e, input, _) --dt
+function basicResponses.jump(e, input)
    local body      = e:get(Body)
    local jumpForce = e:get(JumpForce)
    local grounded  = e:get(Grounded)
 
-   if body and jumpForce and grounded  then
-      if input:down('jump') then
+   if body and jumpForce and grounded then
+      if input:down("jump") then
          body.velocity.y = -jumpForce.force
       end
    end

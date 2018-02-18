@@ -2,8 +2,6 @@ local Fluid  = require("lib.fluid")
 local Vector = require("lib.vector")
 
 local Sprite = Fluid.component(function(e, quad, layer)
-   quad = love.graphics.newQuad(0, 0, 32, 32, 512, 512)
-
    local _, _, w, h = quad:getViewport()
 
    e.quad   = quad

@@ -13,6 +13,8 @@ function OnBeatMover:init(track, bpm)
    self.track:setIntensity(20)
    self.track:setBPM(bpm / 2)
 
+   self.track:setVolume(0)
+
    self.track:onBeat(function()
       local e
       for i = 1, self.pool.size do
