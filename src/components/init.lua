@@ -11,4 +11,5 @@ return {
    moveOnBeat    = require("src.components.moveOnBeat"),
    triggerable   = require("src.components.triggerable"),
    trigger       = require("src.components.trigger"),
+   lit           = require("src.components.lit"),
 }

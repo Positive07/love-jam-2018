@@ -21,6 +21,7 @@ Game:addSystem(S.physics(), "update")
 Game:addSystem(collision, "update")
 Game:addSystem(S.input(), "update")
 Game:addSystem(S.onBeatMover("music/boss_song_1.wav", 140), "update")
+Game:addSystem(S.lighter(), "update")
 
 Game:addSystem(spriteRenderer, "draw")
 Game:addSystem(collision, "draw")
@@ -37,7 +38,7 @@ local Cube = Fluid.entity()
 Game:addEntity(Cube)
 
 local Floor = Fluid.entity()
-:give(C.transform, Vector(200, 500), Vector(80, 48))
+:give(C.transform, Vector(200, 500), Vector(200, 48))
 :give(C.sprite, "background", {
    {Quads.breakable_top_left,     Vector(-32, -16)},
    {Quads.breakable_top,          Vector(-16, -16)},
@@ -103,7 +104,7 @@ Player.name = "Player"
 Game:addEntity(Player)
 
 local Platform = Fluid.entity()
-:give(C.transform, Vector(200, 400), Vector(16, 9))
+:give(C.transform, Vector(200, 200), Vector(16, 9))
 :give(C.sprite, "entities", {
    {Quads.spike_up, Vector(0, 0)},
 })
@@ -119,9 +120,69 @@ end, function(col)
       C.collider.resolve(col)
    end
 end)
---:give(C.moveOnBeat, Vector.right)
 
 Game:addEntity(Platform)
+
+local Lantern_U = Fluid.entity()
+:give(C.transform, Vector(100, 400), Vector(16, 9))
+:give(C.sprite, "entities", {
+   {Quads.spike_up, Vector(0, 0)},
+})
+:give(C.body, Vector(0, 0), nil, nil, 0)
+:give(C.collider, function()
+   return "cross"
+end, function(col)
+   col.item:give(C.lit, Vector(0, -1))
+   col.item:check()
+end)
+
+Game:addEntity(Lantern_U)
+
+local Lantern_D = Fluid.entity()
+:give(C.transform, Vector(150, 400), Vector(16, 9))
+:give(C.sprite, "entities", {
+   {Quads.spike_up, Vector(0, 0)},
+})
+:give(C.body, Vector(0, 0), nil, nil, 0)
+:give(C.collider, function()
+   return "cross"
+end, function(col)
+   col.item:give(C.lit, Vector(0, 1))
+   col.item:check()
+end)
+
+Game:addEntity(Lantern_D)
+
+local Lantern_L = Fluid.entity()
+:give(C.transform, Vector(200, 400), Vector(16, 9))
+:give(C.sprite, "entities", {
+   {Quads.spike_up, Vector(0, 0)},
+})
+:give(C.body, Vector(0, 0), nil, nil, 0)
+:give(C.collider, function()
+   return "cross"
+end, function(col)
+   col.item:give(C.lit, Vector(-1, 0))
+   col.item:check()
+end)
+
+Game:addEntity(Lantern_L)
+
+local Lantern_R = Fluid.entity()
+:give(C.transform, Vector(250, 400), Vector(16, 9))
+:give(C.sprite, "entities", {
+   {Quads.spike_up, Vector(0, 0)},
+})
+:give(C.body, Vector(0, 0), nil, nil, 0)
+:give(C.collider, function()
+   return "cross"
+end, function(col)
+   col.item:give(C.lit, Vector(1, 0))
+   col.item:check()
+end)
+
+Game:addEntity(Lantern_R)
+
 
 spriteRenderer.target = Player
 --[[
