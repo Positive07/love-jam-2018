@@ -25,16 +25,6 @@ Game:addSystem(S.onBeatMover("music/boss_song_1.wav", 140), "update")
 Game:addSystem(spriteRenderer, "draw")
 Game:addSystem(collision, "draw")
 
-for i = 1, 20 do
-   local Pattern = Fluid.entity()
-   :give(C.transform, Vector(100 + i * 40, 100), Vector(32, 32))
-   :give(C.sprite, Quads.pattern)
-   :give(C.body, Vector(0, 0), nil, nil, 1)
-   :give(C.collider)
-
-   Game:addEntity(Pattern)
-end
-
 local Cube = Fluid.entity()
 :give(C.transform, Vector(10, 10), Vector(48, 48))
 :give(C.sprite, Quads.cube)
@@ -44,22 +34,9 @@ local Cube = Fluid.entity()
 
 Game:addEntity(Cube)
 
-local adds = {"", "_l", "_r", "_u", "_d", "_lit", "_lit_l", "_lit_r", "_lit_u", "_lit_d"}
-
-for i = 1, #adds do
-   local Lantern = Fluid.entity()
-   :give(C.transform, Vector(10 + i * 20, 200), Vector(16, 32))
-   :give(C.sprite, Quads["lantern"..adds[i]])
-   :give(C.collider)
-   :give(C.moveOnBeat, Vector.down)
-   print("lantern"..adds[i])
-   Game:addEntity(Lantern)
-end
-
-
 local Floor = Fluid.entity()
 :give(C.transform, Vector(200, 500), Vector(420, 32))
-:give(C.sprite, Quads.pattern)
+:give(C.sprite, Quads.breakable_top_left)
 :give(C.collider)
 
 Game:addEntity(Floor)
@@ -86,5 +63,3 @@ local Player = Fluid.entity()
 :give(C.jumpForce, 400)
 
 Game:addEntity(Player)
-
-spriteRenderer.target = Player
