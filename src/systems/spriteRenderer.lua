@@ -105,11 +105,11 @@ function SpriteRenderer:draw()
 
       self.batch:set(
          i,
-         sprite[1],
+         sprite.quad,
          transform.position.x, transform.position.y,
          nil,
-         nil, nil,
-         sprite[2].x, sprite[2].y
+         sprite.flip and -1 or 1, 1,
+         sprite.offset.x, sprite.offset.y
       )
    end
 

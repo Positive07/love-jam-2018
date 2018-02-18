@@ -11,6 +11,7 @@ local function patch (name, x, y)
   for i, corner in ipairs(corners) do
     local offx, offy = (i - 1) % 3, math.floor(i/3)
     Quads[name..corner] = quad(x + offx * 16, y + offy * 16, 16, 16, sw, sh)
+  end
 end
 
 patch('breakable',    0,  0)
@@ -61,5 +62,17 @@ Quads['glass_bottom'] = quad(144, 128, 16, 16, sw, sh)
 
 Quads['glass_top_broken']    = quad(128,  96, 16, 16, sw, sh)
 Quads['glass_bottom_broken'] = quad(128, 128, 16, 16, sw, sh)
+
+Quads['player_static_1'] = quad(176, 0, 20, 32, sw, sh)
+Quads['player_static_2'] = quad(208, 0, 20, 32, sw, sh)
+Quads['player_static_3'] = quad(240, 0, 20, 32, sw, sh)
+
+Quads['player_transition_1'] = quad(176, 32, 20, 32, sw, sh)
+Quads['player_transition_2'] = quad(208, 32, 20, 32, sw, sh)
+Quads['player_transition_3'] = quad(240, 32, 20, 32, sw, sh)
+
+Quads['player_run_1'] = quad(176, 64, 20, 32, sw, sh)
+Quads['player_run_2'] = quad(208, 64, 20, 32, sw, sh)
+Quads['player_run_3'] = quad(240, 64, 20, 32, sw, sh)
 
 return Quads
