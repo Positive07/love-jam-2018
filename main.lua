@@ -11,6 +11,32 @@ local Quads = require("src.quads")
 local C = require("src.components")
 local S = require("src.systems")
 
+-- [[ Menu ]]
+local Menu = require("src.instances.game")
+Fluid.addInstance(Menu)
+
+local collision = S.collision()
+
+Menu:addSystem(S.input(), "update")
+Menu:addSystem(collision, "update")
+Menu:addSystem(S.selecter(collision), "update")
+Menu:addSystem(S.spriteRenderer(), "draw")
+
+Menu:addSystem(collision, "draw")
+
+local Play = Fluid.entity()
+:give(C.transform, Vector(640, 200), Vector(1080, 200))
+:give(C.collider)
+:give(C.sprite, {
+   {quad = Quads.cube, offset = Vector(0, 0), layer = 5},
+})
+:give(C.selectable, function()
+   print("i am greet")
+end)
+
+Menu:addEntity(Play)
+
+--[[ Game
 local Game = require("src.instances.game")
 Fluid.addInstance(Game)
 
@@ -29,7 +55,7 @@ Game:addSystem(collision, "draw")
 local Cube = Fluid.entity()
 :give(C.transform, Vector(10, 200), Vector(48, 48))
 :give(C.sprite, {
-   {quad = Quads.cube, offset = Vector(24, 24), layer = 5},
+   {Quads.cube, Vector(0, 0), 5},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider)
@@ -40,23 +66,23 @@ Game:addEntity(Cube)
 local Floor = Fluid.entity()
 :give(C.transform, Vector(200, 500), Vector(200, 48))
 :give(C.sprite, {
-   {quad = Quads.breakable_bottom_right, offset = Vector(-32, -16), layer = 2},
-   {quad = Quads.breakable_bottom,       offset = Vector(-16, -16), layer = 2},
-   {quad = Quads.breakable_bottom,       offset = Vector(  0, -16), layer = 2},
-   {quad = Quads.breakable_bottom,       offset = Vector( 16, -16), layer = 2},
-   {quad = Quads.breakable_bottom_left,  offset = Vector( 32, -16), layer = 2},
+   {Quads.breakable_top_left,     Vector(-32, -16), 2},
+   {Quads.breakable_top,          Vector(-16, -16), 2},
+   {Quads.breakable_top,          Vector(  0, -16), 2},
+   {Quads.breakable_top,          Vector( 16, -16), 2},
+   {Quads.breakable_top_right,    Vector( 32, -16), 2},
 
-   {quad = Quads.breakable_right,        offset = Vector(-32, 0), layer = 2},
-   {quad = Quads.breakable_middle,       offset = Vector(-16, 0), layer = 2},
-   {quad = Quads.breakable_middle,       offset = Vector(  0, 0), layer = 2},
-   {quad = Quads.breakable_middle,       offset = Vector( 16, 0), layer = 2},
-   {quad = Quads.breakable_left,         offset = Vector( 32, 0), layer = 2},
+   {Quads.breakable_left,         Vector(-32, 0), 2},
+   {Quads.breakable_middle,       Vector(-16, 0), 2},
+   {Quads.breakable_middle,       Vector(  0, 0), 2},
+   {Quads.breakable_middle,       Vector( 16, 0), 2},
+   {Quads.breakable_right,        Vector( 32, 0), 2},
 
-   {quad = Quads.breakable_top_right,    offset = Vector(-32, 16), layer = 2},
-   {quad = Quads.breakable_top,          offset = Vector(-16, 16), layer = 2},
-   {quad = Quads.breakable_top,          offset = Vector(  0, 16), layer = 2},
-   {quad = Quads.breakable_top,          offset = Vector( 16, 16), layer = 2},
-   {quad = Quads.breakable_top_left,     offset = Vector( 32, 16), layer = 2},
+   {Quads.breakable_bottom_left,  Vector(-32, 16), 2},
+   {Quads.breakable_bottom,       Vector(-16, 16), 2},
+   {Quads.breakable_bottom,       Vector(  0, 16), 2},
+   {Quads.breakable_bottom,       Vector( 16, 16), 2},
+   {Quads.breakable_bottom_right, Vector( 32, 16), 2},
 })
 :give(C.collider)
 Floor.name = "Floor"
@@ -66,7 +92,7 @@ Game:addEntity(Floor)
 local q = {}
 for x = -20, 20 do
    for y = -20, 20 do
-      q[#q + 1] = {quad = Quads.background_middle, offset = Vector(x * 16, y * 16), layer = 1}
+      q[#q + 1] = {Quads.breakable_middle, Vector(x * 16, y * 16), 1}
    end
 end
 
@@ -78,9 +104,9 @@ local Wall = Fluid.entity()
 Game:addEntity(Wall)
 
 local Player = Fluid.entity()
-:give(C.transform, Vector(200, 450), Vector(20, 32))
+:give(C.transform, Vector(200, 450), Vector(48, 48))
 :give(C.sprite, {
-   {quad = Quads.player_static_1, offset = Vector(10, 16), layer = 5},
+   {Quads.cube, Vector(0, 0), 5},
 })
 :give(C.body, Vector(0, 0), 800, 200, 1)
 :give(C.collider)
@@ -96,9 +122,6 @@ local Player = Fluid.entity()
    },
    joystick = love.joystick.getJoysticks()[1],
 })
-:give(C.animation, function(e, quads, dt)
-  --Do something here
-end)
 :give(C.inputResponse)
 :give(C.moveSpeed, 700)
 :give(C.jumpForce, 600)
@@ -107,9 +130,9 @@ Player.name = "Player"
 Game:addEntity(Player)
 
 local Platform = Fluid.entity()
-:give(C.transform, Vector(200, 200), Vector(16, 10))
+:give(C.transform, Vector(200, 200), Vector(16, 9))
 :give(C.sprite, {
-   {quad = Quads.spike_up, offset = Vector(8, 5), layer = 3.5},
+   {Quads.spike_up, Vector(0, 0), 3.5},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function(item, other)
@@ -129,7 +152,7 @@ Game:addEntity(Platform)
 local Lantern_U = Fluid.entity()
 :give(C.transform, Vector(100, 400), Vector(16, 9))
 :give(C.sprite, {
-   {quad = Quads.lantern, offset = Vector(0, 0), layer = 4.5},
+   {Quads.lantern, Vector(0, 0), 4.5},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function()
@@ -144,7 +167,7 @@ Game:addEntity(Lantern_U)
 local Lantern_D = Fluid.entity()
 :give(C.transform, Vector(150, 400), Vector(16, 9))
 :give(C.sprite, {
-   {quad = Quads.lantern, offset = Vector(0, 0), layer = 4.5},
+   {Quads.lantern, Vector(0, 0), 4.5},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function()
@@ -159,7 +182,7 @@ Game:addEntity(Lantern_D)
 local Lantern_L = Fluid.entity()
 :give(C.transform, Vector(200, 400), Vector(16, 9))
 :give(C.sprite, {
-   {quad = Quads.lantern, offset = Vector(0, 0), layer = 4.5},
+   {Quads.lantern, Vector(0, 0), 4.5},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function()
@@ -174,7 +197,7 @@ Game:addEntity(Lantern_L)
 local Lantern_R = Fluid.entity()
 :give(C.transform, Vector(250, 400), Vector(16, 9))
 :give(C.sprite, {
-   {quad = Quads.lantern, offset = Vector(0, 0), layer = 4.5},
+   {Quads.lantern, Vector(0, 0), 4.5},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function()

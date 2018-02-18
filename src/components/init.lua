@@ -9,8 +9,8 @@ return {
    jumpForce     = require("src.components.jumpForce"),
    moveSpeed     = require("src.components.moveSpeed"),
    moveOnBeat    = require("src.components.moveOnBeat"),
-   triggerable   = require("src.components.triggerable"),
-   trigger       = require("src.components.trigger"),
    lit           = require("src.components.lit"),
-   animation     = require("src.components.animation"),
+
+   selected   = require("src.components.selected"),
+   selectable = require("src.components.selectable"),
 }
