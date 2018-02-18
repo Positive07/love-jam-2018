@@ -8,12 +8,13 @@ function SpriteRenderer:init()
    self.atlas = love.graphics.newImage("assets/tileset.png")
    self.batch = love.graphics.newSpriteBatch(self.atlas, 10000)
    self.open  = {}
+   self.quads = {}
+
+   self.dirty = false
 
    for i = 1, 10000 do
-      self.batch:add(nil, nil, nil, 0, 0)
-      self.open[i] = i
+      self.open[i] = self.batch:add(nil, nil, nil, 0, 0)
    end
-
 
    self.camera = Camera.new()
    self.buffer = love.graphics.newCanvas(love.graphics.getDimensions())
@@ -33,22 +34,54 @@ function SpriteRenderer:init()
 end
 
 function SpriteRenderer:entityAdded(e)
-   local sprite = e:get(C.sprite)
+   local sprites = e:get(C.sprite).sprites
 
-   sprite.id = self.open[#self.open]
-   self.open[#self.open] = nil
+   for key, quad in ipairs(sprites) do
+      table.insert(self.quads, {
+         layer = quad.layer,
+         key   = key,
+         e     = e,
+         id    = self.open[#self.open]
+      })
+      self.open[#self.open] = nil
+
+      self.dirty = true
+   end
 end
 
-function SpriteRenderer:entityRemoved()
-   local sprite = e:get(C.sprite)
+function SpriteRenderer:entityRemoved(e)
+   --This is a custom filtering code
+   --It removes values from a list without changing it's order
+   local j = 1
+   local len = #self.quads
+   local left = len
 
-   self.open[#self.open + 1] = sprite.id
-   self.batch:set(sprite.id, nil, nil, nil, 0, 0)
+   for i = 1, len do
+      if self.quads[i].e == e then
+         --Reuse the id
+         local id = self.quads[i].id
+         table.insert(self.open, id)
+         self.batch:set(id, nil, nil, nil, 0, 0)
+
+         left = left - 1
+      else
+         --Move quad
+         if j ~= i then
+            self.quads[j] = self.quads[i]
+         end
+         j = j + 1
+      end
+   end
+
+   --Delete repeated quads
+   for i = left + 1, len do
+      self.quads[i] = nil
+   end
 end
 
 
 local function sort(a, b)
-   return a:get(C.sprite).layer < b:get(C.sprite).layer
+   return a.layer < b.layer
 end
 
 function SpriteRenderer:draw()
@@ -60,23 +93,26 @@ function SpriteRenderer:draw()
       end
    end
 
-   table.sort(self.pool, sort)
+   if self.dirty then
+      self.dirty = false
+      table.sort(self.quads, sort)
+   end
 
    love.graphics.setColor(255, 255, 255)
 
-   for i = 1, self.pool.size do
-      local e = self.pool:get(i)
+   for _, quad in ipairs(self.quads) do
+      local e = quad.e
 
       local transform = e:get(C.transform)
-      local sprite    = e:get(C.sprite)
+      local sprite    = e:get(C.sprite).sprites[quad.key]
 
       self.batch:set(
-        sprite.id,
+        quad.id,
         sprite.quad,
         transform.position.x, transform.position.y,
         nil,
         nil, nil,
-        sprite.origin.x, sprite.origin.y
+        sprite.offset.x, sprite.offset.y
       )
    end
 

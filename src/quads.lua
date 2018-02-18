@@ -2,7 +2,7 @@ local Quads = {}
 
 local sw, sh = 512, 512
 
-Quads["breakable_top_left"]     = love.graphics.newQuad(0,  0, 16, 16, 512, 512)
+Quads["breakable_top_left"]     = love.graphics.newQuad(0,   0, 16, 16, 512, 512)
 Quads["breakable_top"]          = love.graphics.newQuad(16,  0, 16, 16, 512, 512)
 Quads["breakable_top_right"]    = love.graphics.newQuad(32,  0, 16, 16, 512, 512)
 Quads["breakable_left"]         = love.graphics.newQuad( 0, 16, 16, 16, 512, 512)

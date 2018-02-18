@@ -27,7 +27,7 @@ Game:addSystem(collision, "draw")
 
 local Cube = Fluid.entity()
 :give(C.transform, Vector(10, 10), Vector(48, 48))
-:give(C.sprite, Quads.cube)
+:give(C.sprite, {{ quad = Quads.cube, offset = Vector(24, 24), layer = 3 }})
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider)
 :give(C.moveOnBeat, Vector.right)
@@ -36,14 +36,14 @@ Game:addEntity(Cube)
 
 local Floor = Fluid.entity()
 :give(C.transform, Vector(200, 500), Vector(420, 32))
-:give(C.sprite, Quads.breakable_top_left)
+:give(C.sprite, {{ quad = Quads.breakable_top_left, offset = Vector(8, 8), layer = 1 }})
 :give(C.collider)
 
 Game:addEntity(Floor)
 
 local Player = Fluid.entity()
 :give(C.transform, Vector(200, 50), Vector(48, 48))
-:give(C.sprite, Quads.cube)
+:give(C.sprite, {{ quad = Quads.cube, offset = Vector(24, 24), layer = 3 }})
 :give(C.body, Vector(0, 0), nil, nil, 1)
 :give(C.collider)
 :give(C.controls, {
