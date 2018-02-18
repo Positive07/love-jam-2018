@@ -24,6 +24,7 @@ Quads["breakable_bottom_right"] = love.graphics.newQuad(32, 32, 16, 16, 512, 512
 
 Quads["cube"]  = love.graphics.newQuad(0, 96, 48, 48, 512, 512)
 
+Quads["spike_up"] = love.graphics.newQuad(144, 70, 16, 9, 512, 512)
 
 
 return Quads

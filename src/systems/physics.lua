@@ -11,6 +11,8 @@ function Physics:init(gravity)
 end
 
 function Physics:update(dt)
+   dt = dt /2
+
    local e
    for i = 1, self.pool.size do
       local e = self.pool:get(i)

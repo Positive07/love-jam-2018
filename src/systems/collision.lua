@@ -7,6 +7,9 @@ local Collider = Fluid.system({C.transform, C.collider})
 
 function Collider:init()
    self.world = Bump.newWorld(64)
+   self.propagate = function(item, other)
+      return other:get(C.collider).filter(other, item)
+   end
 end
 
 function Collider:entityAdded(e)
@@ -38,18 +41,19 @@ function Collider:update()
       local transform = e:get(C.transform)
       local collider  = e:get(C.collider)
 
-      local newx, newy, cols, len = self.world:move(e, transform.position.x - transform.size.x/2, transform.position.y - transform.size.y/2, collider.filter)
+      local newx, newy, cols, len = self.world:move(e, transform.position.x - transform.size.x/2, transform.position.y - transform.size.y/2, self.propagate)
       transform.position:set(newx + transform.size.x/2, newy + transform.size.y/2)
 
       e:remove(C.grounded)
       for i = 1, len do
-         collider.resolve(cols[i])
+         cols[i].item, cols[i].other = cols[i].other, cols[i].item
+         cols[i].item:get(C.collider).resolve(cols[i])
       end
    end
 end
 
 function Collider:draw()
-   love.graphics.setColor(0, 255, 0)
+   love.graphics.setColor(255, 0, 0)
    local items, len = self.world:getItems()
 
    for i = 1, len do

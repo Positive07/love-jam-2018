@@ -37,7 +37,7 @@ function SpriteRenderer:init()
 
    self.target = nil
 
-   self.camera:zoomTo(1)
+   self.camera:zoomTo(2)
 
 
    self.shader:send("width", 1)
