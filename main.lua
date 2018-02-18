@@ -126,7 +126,7 @@ Game:addEntity(Platform)
 local Lantern_U = Fluid.entity()
 :give(C.transform, Vector(100, 400), Vector(16, 9))
 :give(C.sprite, "entities", {
-   {Quads.spike_up, Vector(0, 0)},
+   {Quads.lantern, Vector(0, 0)},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function()
@@ -141,7 +141,7 @@ Game:addEntity(Lantern_U)
 local Lantern_D = Fluid.entity()
 :give(C.transform, Vector(150, 400), Vector(16, 9))
 :give(C.sprite, "entities", {
-   {Quads.spike_up, Vector(0, 0)},
+   {Quads.lantern, Vector(0, 0)},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function()
@@ -156,7 +156,7 @@ Game:addEntity(Lantern_D)
 local Lantern_L = Fluid.entity()
 :give(C.transform, Vector(200, 400), Vector(16, 9))
 :give(C.sprite, "entities", {
-   {Quads.spike_up, Vector(0, 0)},
+   {Quads.lantern, Vector(0, 0)},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function()
@@ -171,7 +171,7 @@ Game:addEntity(Lantern_L)
 local Lantern_R = Fluid.entity()
 :give(C.transform, Vector(250, 400), Vector(16, 9))
 :give(C.sprite, "entities", {
-   {Quads.spike_up, Vector(0, 0)},
+   {Quads.lantern, Vector(0, 0)},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function()

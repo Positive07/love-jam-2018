@@ -26,5 +26,8 @@ Quads["cube"]  = love.graphics.newQuad(0, 96, 48, 48, 512, 512)
 
 Quads["spike_up"] = love.graphics.newQuad(144, 70, 16, 9, 512, 512)
 
+Quads["lantern"]     = love.graphics.newQuad(130, 144, 16, 21, 512, 512)
+Quads["lantern_lit"] = love.graphics.newQuad(146, 144, 16, 21, 512, 512)
+
 
 return Quads

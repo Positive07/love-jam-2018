@@ -5,11 +5,9 @@ local C = require("src.components")
 local Lighter = Fluid.system({C.lit}, {C.moveOnBeat, "target"})
 
 function Lighter:entityAddedTo(e, pool)
-   print(e)
    if pool.name == "pool" then
       for i = self.pool.size, 1, -1 do
          local o = self.pool:get(i)
-         print(o)
          if o ~= e then
             o:remove(C.lit)
             o:check()
