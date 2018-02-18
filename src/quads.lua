@@ -9,7 +9,7 @@ local corners = {
 }
 local function patch (name, x, y)
   for i, corner in ipairs(corners) do
-    local offx, offy = (i - 1) % 3, math.floor(i/3)
+    local offx, offy = (i - 1) % 3, math.floor((i-1)/3)
     Quads[name..corner] = quad(x + offx * 16, y + offy * 16, 16, 16, sw, sh)
   end
 end
@@ -23,10 +23,10 @@ patch('fade',        96, 48)
 
 Quads["cube"]  = quad(0, 96, 48, 48, sw, sh)
 
-Quads["spike_up"]    = quad(144, 70, 16,  9, sw, sh)
-Quads["spike_right"] = quad(160, 64,  9, 16, sw, sh)
-Quads["spike_down"]  = quad(160, 80, 16,  9, sw, sh)
-Quads["spike_left"]  = quad(151, 80,  9, 16, sw, sh)
+Quads["spike_up"]    = quad(144, 69, 16, 10, sw, sh)
+Quads["spike_right"] = quad(160, 64, 10, 16, sw, sh)
+Quads["spike_down"]  = quad(160, 80, 16, 10, sw, sh)
+Quads["spike_left"]  = quad(152, 80, 10, 16, sw, sh)
 
 Quads["lantern"]     = quad(130, 144, 16, 21, sw, sh)
 Quads["lantern_lit"] = quad(146, 144, 16, 21, sw, sh)

@@ -21,7 +21,7 @@ function SpriteRenderer:init()
 
    self.target = nil
 
-   self.camera:zoomTo(1)
+   self.camera:zoomTo(2)
 
 
    self.shader:send("width", 1)
@@ -37,7 +37,7 @@ function SpriteRenderer:entityAdded(e)
 
    for key, quad in ipairs(sprites) do
       table.insert(self.quads, {
-         layer = quad[3],
+         layer = quad.layer,
          key   = key,
          e     = e,
       })

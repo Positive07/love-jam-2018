@@ -12,4 +12,5 @@ return {
    triggerable   = require("src.components.triggerable"),
    trigger       = require("src.components.trigger"),
    lit           = require("src.components.lit"),
+   animation     = require("src.components.animation"),
 }

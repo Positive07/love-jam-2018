@@ -29,7 +29,7 @@ Game:addSystem(collision, "draw")
 local Cube = Fluid.entity()
 :give(C.transform, Vector(10, 200), Vector(48, 48))
 :give(C.sprite, {
-   {quad = Quads.cube, offset = Vector(0, 0), layer = 5},
+   {quad = Quads.cube, offset = Vector(24, 24), layer = 5},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider)
@@ -40,23 +40,23 @@ Game:addEntity(Cube)
 local Floor = Fluid.entity()
 :give(C.transform, Vector(200, 500), Vector(200, 48))
 :give(C.sprite, {
-   {quad = Quads.breakable_top_left,     offset = Vector(-32, -16), layer = 2},
-   {quad = Quads.breakable_top,          offset = Vector(-16, -16), layer = 2},
-   {quad = Quads.breakable_top,          offset = Vector(  0, -16), layer = 2},
-   {quad = Quads.breakable_top,          offset = Vector( 16, -16), layer = 2},
-   {quad = Quads.breakable_top_right,    offset = Vector( 32, -16), layer = 2},
+   {quad = Quads.breakable_bottom_right, offset = Vector(-32, -16), layer = 2},
+   {quad = Quads.breakable_bottom,       offset = Vector(-16, -16), layer = 2},
+   {quad = Quads.breakable_bottom,       offset = Vector(  0, -16), layer = 2},
+   {quad = Quads.breakable_bottom,       offset = Vector( 16, -16), layer = 2},
+   {quad = Quads.breakable_bottom_left,  offset = Vector( 32, -16), layer = 2},
 
-   {quad = Quads.breakable_left,         offset = Vector(-32, 0), layer = 2},
+   {quad = Quads.breakable_right,        offset = Vector(-32, 0), layer = 2},
    {quad = Quads.breakable_middle,       offset = Vector(-16, 0), layer = 2},
    {quad = Quads.breakable_middle,       offset = Vector(  0, 0), layer = 2},
    {quad = Quads.breakable_middle,       offset = Vector( 16, 0), layer = 2},
-   {quad = Quads.breakable_right,        offset = Vector( 32, 0), layer = 2},
+   {quad = Quads.breakable_left,         offset = Vector( 32, 0), layer = 2},
 
-   {quad = Quads.breakable_bottom_left,  offset = Vector(-32, 16), layer = 2},
-   {quad = Quads.breakable_bottom,       offset = Vector(-16, 16), layer = 2},
-   {quad = Quads.breakable_bottom,       offset = Vector(  0, 16), layer = 2},
-   {quad = Quads.breakable_bottom,       offset = Vector( 16, 16), layer = 2},
-   {quad = Quads.breakable_bottom_right, offset = Vector( 32, 16), layer = 2},
+   {quad = Quads.breakable_top_right,    offset = Vector(-32, 16), layer = 2},
+   {quad = Quads.breakable_top,          offset = Vector(-16, 16), layer = 2},
+   {quad = Quads.breakable_top,          offset = Vector(  0, 16), layer = 2},
+   {quad = Quads.breakable_top,          offset = Vector( 16, 16), layer = 2},
+   {quad = Quads.breakable_top_left,     offset = Vector( 32, 16), layer = 2},
 })
 :give(C.collider)
 Floor.name = "Floor"
@@ -66,7 +66,7 @@ Game:addEntity(Floor)
 local q = {}
 for x = -20, 20 do
    for y = -20, 20 do
-      q[#q + 1] = {quad = Quads.breakable_middle, offset = Vector(x * 16, y * 16), layer = 1}
+      q[#q + 1] = {quad = Quads.background_middle, offset = Vector(x * 16, y * 16), layer = 1}
    end
 end
 
@@ -78,9 +78,9 @@ local Wall = Fluid.entity()
 Game:addEntity(Wall)
 
 local Player = Fluid.entity()
-:give(C.transform, Vector(200, 450), Vector(48, 48))
+:give(C.transform, Vector(200, 450), Vector(20, 32))
 :give(C.sprite, {
-   {quad = Quads.cube, offset = Vector(0, 0), layer = 5},
+   {quad = Quads.player_static_1, offset = Vector(10, 16), layer = 5},
 })
 :give(C.body, Vector(0, 0), 800, 200, 1)
 :give(C.collider)
@@ -96,6 +96,9 @@ local Player = Fluid.entity()
    },
    joystick = love.joystick.getJoysticks()[1],
 })
+:give(C.animation, function(e, quads, dt)
+  --Do something here
+end)
 :give(C.inputResponse)
 :give(C.moveSpeed, 700)
 :give(C.jumpForce, 600)
@@ -104,9 +107,9 @@ Player.name = "Player"
 Game:addEntity(Player)
 
 local Platform = Fluid.entity()
-:give(C.transform, Vector(200, 200), Vector(16, 9))
+:give(C.transform, Vector(200, 200), Vector(16, 10))
 :give(C.sprite, {
-   {quad = Quads.spike_up, offset = Vector(0, 0), layer = 3.5},
+   {quad = Quads.spike_up, offset = Vector(8, 5), layer = 3.5},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function(item, other)
