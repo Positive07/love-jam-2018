@@ -116,21 +116,7 @@ local Platform = Fluid.entity()
    end
 end, function(col)
    if col.type == "slide" then
-      local body = col.other:get(C.body)
-
-      if body then
-         if col.normal.x ~= 0 then
-            body.velocity.x = 0
-         end
-
-         if col.normal.y ~= 0 then
-            body.velocity.y = 0
-
-            if col.normal.y == -1 then
-               col.other:give(C.grounded, col.item)
-            end
-         end
-      end
+      C.collider.resolve(col)
    end
 end)
 --:give(C.moveOnBeat, Vector.right)

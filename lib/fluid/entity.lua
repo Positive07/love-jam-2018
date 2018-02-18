@@ -41,7 +41,7 @@ function Entity:check()
 
    for component, _ in pairs(self.removed) do
       self.components[component] = nil
-      self.removed = [component] = nil
+      self.removed[component]    = nil
    end
 
    return self
