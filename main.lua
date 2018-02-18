@@ -38,25 +38,25 @@ local Cube = Fluid.entity()
 Game:addEntity(Cube)
 
 local Floor = Fluid.entity()
-:give(C.transform, Vector(200, 500), Vector(200, 48))
+:give(C.transform, Vector(200, 500), Vector(80, 48))
 :give(C.sprite, {
-   {quad = Quads.breakable_bottom_right, offset = Vector(-32, -16), layer = 2},
-   {quad = Quads.breakable_bottom,       offset = Vector(-16, -16), layer = 2},
-   {quad = Quads.breakable_bottom,       offset = Vector(  0, -16), layer = 2},
-   {quad = Quads.breakable_bottom,       offset = Vector( 16, -16), layer = 2},
-   {quad = Quads.breakable_bottom_left,  offset = Vector( 32, -16), layer = 2},
+   {quad = Quads.breakable_bottom_right, offset = Vector(-24, -8), layer = 2},
+   {quad = Quads.breakable_bottom,       offset = Vector( -8, -8), layer = 2},
+   {quad = Quads.breakable_bottom,       offset = Vector(  8, -8), layer = 2},
+   {quad = Quads.breakable_bottom,       offset = Vector( 24, -8), layer = 2},
+   {quad = Quads.breakable_bottom_left,  offset = Vector( 40, -8), layer = 2},
 
-   {quad = Quads.breakable_right,        offset = Vector(-32, 0), layer = 2},
-   {quad = Quads.breakable_middle,       offset = Vector(-16, 0), layer = 2},
-   {quad = Quads.breakable_middle,       offset = Vector(  0, 0), layer = 2},
-   {quad = Quads.breakable_middle,       offset = Vector( 16, 0), layer = 2},
-   {quad = Quads.breakable_left,         offset = Vector( 32, 0), layer = 2},
+   {quad = Quads.breakable_right,        offset = Vector(-24, 8), layer = 2},
+   {quad = Quads.breakable_middle,       offset = Vector( -8, 8), layer = 2},
+   {quad = Quads.breakable_middle,       offset = Vector(  8, 8), layer = 2},
+   {quad = Quads.breakable_middle,       offset = Vector( 24, 8), layer = 2},
+   {quad = Quads.breakable_left,         offset = Vector( 40, 8), layer = 2},
 
-   {quad = Quads.breakable_top_right,    offset = Vector(-32, 16), layer = 2},
-   {quad = Quads.breakable_top,          offset = Vector(-16, 16), layer = 2},
-   {quad = Quads.breakable_top,          offset = Vector(  0, 16), layer = 2},
-   {quad = Quads.breakable_top,          offset = Vector( 16, 16), layer = 2},
-   {quad = Quads.breakable_top_left,     offset = Vector( 32, 16), layer = 2},
+   {quad = Quads.breakable_top_right,    offset = Vector(-24, 24), layer = 2},
+   {quad = Quads.breakable_top,          offset = Vector( -8, 24), layer = 2},
+   {quad = Quads.breakable_top,          offset = Vector(  8, 24), layer = 2},
+   {quad = Quads.breakable_top,          offset = Vector( 24, 24), layer = 2},
+   {quad = Quads.breakable_top_left,     offset = Vector( 40, 24), layer = 2},
 })
 :give(C.collider)
 Floor.name = "Floor"
@@ -127,9 +127,9 @@ end)
 Game:addEntity(Platform)
 
 local Lantern_U = Fluid.entity()
-:give(C.transform, Vector(100, 400), Vector(16, 9))
+:give(C.transform, Vector(100, 400), Vector(16, 20))
 :give(C.sprite, {
-   {quad = Quads.lantern, offset = Vector(0, 0), layer = 4.5},
+   {quad = Quads.lantern, offset = Vector(8, 10), layer = 4.5},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function()
@@ -142,9 +142,9 @@ end)
 Game:addEntity(Lantern_U)
 
 local Lantern_D = Fluid.entity()
-:give(C.transform, Vector(150, 400), Vector(16, 9))
+:give(C.transform, Vector(150, 400), Vector(16, 20))
 :give(C.sprite, {
-   {quad = Quads.lantern, offset = Vector(0, 0), layer = 4.5},
+   {quad = Quads.lantern, offset = Vector(8, 10), layer = 4.5},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function()
@@ -157,9 +157,9 @@ end)
 Game:addEntity(Lantern_D)
 
 local Lantern_L = Fluid.entity()
-:give(C.transform, Vector(200, 400), Vector(16, 9))
+:give(C.transform, Vector(200, 400), Vector(16, 20))
 :give(C.sprite, {
-   {quad = Quads.lantern, offset = Vector(0, 0), layer = 4.5},
+   {quad = Quads.lantern, offset = Vector(8, 10), layer = 4.5},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function()
@@ -172,9 +172,9 @@ end)
 Game:addEntity(Lantern_L)
 
 local Lantern_R = Fluid.entity()
-:give(C.transform, Vector(250, 400), Vector(16, 9))
+:give(C.transform, Vector(250, 400), Vector(16, 20))
 :give(C.sprite, {
-   {quad = Quads.lantern, offset = Vector(0, 0), layer = 4.5},
+   {quad = Quads.lantern, offset = Vector(8, 10), layer = 4.5},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function()
