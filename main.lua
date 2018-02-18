@@ -109,10 +109,9 @@ local Platform = Fluid.entity()
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
 :give(C.collider, function(item, other)
-   local transformi = item:get(C.transform)
-   local transformo = other:get(C.transform)
+   local body = other:get(C.body)
 
-   if transformi.position.y - transformi.size.y/2 > transformo.position.y + transformo.size.y/2 - 5 then
+   if body.velocity.y > 0 then
       return "slide"
    end
 end, function(col)
