@@ -7,6 +7,8 @@ function Entity.new()
    local e = setmetatable({
       components = {},
       instance   = nil,
+
+      removed = {},
    }, Entity)
 
    return e
@@ -26,7 +28,8 @@ end
 -- @param component The Component to remove
 -- @return self
 function Entity:remove(component)
-   self.components[component] = nil
+   --self.components[component] = nil
+   self.removed[component] = true
 
    return self
 end
@@ -35,6 +38,11 @@ end
 -- @return self
 function Entity:check()
    self.instance:checkEntity(self)
+
+   for component, _ in pairs(self.removed) do
+      self.components[component] = nil
+      self.removed = [component] = nil
+   end
 
    return self
 end
