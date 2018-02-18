@@ -4,32 +4,16 @@ local Camera = require("lib.camera")
 local C = require("src.components")
 
 local SpriteRenderer = Fluid.system({C.transform, C.sprite})
-
-local function newLayer(atlas, maxSprites)
-   local layer = {
-      batch = love.graphics.newSpriteBatch(atlas, maxSprites),
-      open  = {},
-   }
-
-   for i = 1, maxSprites do
-      layer.open[i] = layer.batch:add(nil, nil, nil, 0, 0)
-   end
-
-   return layer
-end
-
 function SpriteRenderer:init()
    self.atlas = love.graphics.newImage("assets/tileset.png")
-   self.open  = {}
+   self.batch = love.graphics.newSpriteBatch(self.atlas, 10000)
+   self.quads = {}
 
-   self.layers = {
-      background = newLayer(self.atlas, 10000),
-      props      = newLayer(self.atlas, 500),
-      entities   = newLayer(self.atlas, 100),
-   }
-   self.layers[1] = self.layers.background
-   self.layers[2] = self.layers.props
-   self.layers[3] = self.layers.entities
+   self.dirty = false
+
+   for i = 1, 10000 do
+      self.batch:add(nil, nil, nil, 0, 0)
+   end
 
    self.camera = Camera.new()
    self.buffer = love.graphics.newCanvas(love.graphics.getDimensions())
@@ -37,7 +21,7 @@ function SpriteRenderer:init()
 
    self.target = nil
 
-   self.camera:zoomTo(2)
+   self.camera:zoomTo(1)
 
 
    self.shader:send("width", 1)
@@ -49,32 +33,46 @@ function SpriteRenderer:init()
 end
 
 function SpriteRenderer:entityAdded(e)
-   local transform = e:get(C.transform)
-   local sprite    = e:get(C.sprite)
+   local sprites = e:get(C.sprite).sprites
 
-   local layer = self.layers[sprite.layer]
+   for key, quad in ipairs(sprites) do
+      table.insert(self.quads, {
+         layer = quad[3],
+         key   = key,
+         e     = e,
+      })
 
-   for i, quad in ipairs(sprite.quads) do
-      local position = transform.position + quad[2]
-      local origin   = sprite.origins[i]
-      local id       = #layer.open
-
-      sprite.ids[i] = id
-      layer.batch:set(id, quad[1], position.x, position.y, nil, nil, nil, origin.x, origin.y)
-
-      layer.open[id] = nil
+      self.dirty = true
    end
 end
 
 function SpriteRenderer:entityRemoved(e)
-   local transform = e:get(C.transform)
-   local sprite    = e:get(C.sprite)
+   --This is a custom filtering code
+   --It removes values from a list without changing it's order
+   local j = 1
+   local len = #self.quads
+   local left = len
 
-   local layer = self.layers[sprite.layer]
+   for i = 1, len do
+      if self.quads[i].e == e then
+         --Reuse the id
+         local id = self.quads[i].id
+         table.insert(self.open, id)
 
-   for _, id in ipairs(sprite.ids) do
-      layer.batch:set(id, nil, nil, nil, 0, 0)
-      layer.open[#layer.open + 1] = id
+         left = left - 1
+      else
+         --Move quad
+         if j ~= i then
+            self.quads[j] = self.quads[i]
+         end
+         j = j + 1
+      end
+   end
+
+   --Delete repeated quads
+   for i = left + 1, len do
+      self.batch:set(i, nil, nil, nil, 0, 0)
+      self.quads[i] = nil
    end
 end
 
@@ -92,33 +90,34 @@ function SpriteRenderer:draw()
       end
    end
 
+   if self.dirty then
+      self.dirty = false
+      table.sort(self.quads, sort)
+   end
+
    love.graphics.setColor(255, 255, 255)
 
-   local e
-   for i = 1, self.pool.size do
-      e = self.pool:get(i)
+   for i, quad in ipairs(self.quads) do
+      local e = quad.e
 
       local transform = e:get(C.transform)
-      local sprite    = e:get(C.sprite)
+      local sprite    = e:get(C.sprite).sprites[quad.key]
 
-      local layer = self.layers[sprite.layer]
-
-      for i, quad in ipairs(sprite.quads) do
-         local position = transform.position + quad[2]
-         local origin   = sprite.origins[i]
-         local id       = sprite.ids[i]
-
-         layer.batch:set(id, quad[1], position.x, position.y, nil, nil, nil, origin.x, origin.y)
-      end
+      self.batch:set(
+         i,
+         sprite[1],
+         transform.position.x, transform.position.y,
+         nil,
+         nil, nil,
+         sprite[2].x, sprite[2].y
+      )
    end
 
    love.graphics.setCanvas(self.buffer)
       love.graphics.clear(love.graphics.getBackgroundColor())
 
       self.camera:attach()
-         for _, layer in ipairs(self.layers) do
-            love.graphics.draw(layer.batch)
-         end
+         love.graphics.draw(self.batch)
       self.camera:detach()
    love.graphics.setCanvas()
 
