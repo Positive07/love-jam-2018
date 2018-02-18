@@ -9,4 +9,6 @@ return {
    jumpForce     = require("src.components.jumpForce"),
    moveSpeed     = require("src.components.moveSpeed"),
    moveOnBeat    = require("src.components.moveOnBeat"),
+   triggerable   = require("src.components.triggerable"),
+   trigger       = require("src.components.trigger"),
 }
