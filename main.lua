@@ -22,6 +22,7 @@ Game:addSystem(collision, "update")
 Game:addSystem(S.input(), "update")
 Game:addSystem(S.onBeatMover("music/boss_song_1.wav", 140), "update")
 Game:addSystem(S.lighter(), "update")
+Game:addSystem(S.animator(), "update")
 
 Game:addSystem(spriteRenderer, "draw")
 Game:addSystem(collision, "draw")
@@ -126,6 +127,14 @@ end)
 
 Game:addEntity(Platform)
 
+local lantern_animation = function(e, quads, dt)
+  if e:get(C.lightable).lighted then
+    quads[1].quad = Quads.lantern_lit
+  else
+    quads[1].quad = Quads.lantern
+  end
+end
+
 local Lantern_U = Fluid.entity()
 :give(C.transform, Vector(100, 400), Vector(16, 20))
 :give(C.sprite, {
@@ -138,6 +147,8 @@ end, function(col)
    col.item:give(C.lit, Vector(0, -1))
    col.item:check()
 end)
+:give(C.lightable, Vector(0, -1))
+:give(C.animation, lantern_animation)
 
 Game:addEntity(Lantern_U)
 
@@ -153,6 +164,8 @@ end, function(col)
    col.item:give(C.lit, Vector(0, 1))
    col.item:check()
 end)
+:give(C.lightable, Vector(0, 1))
+:give(C.animation, lantern_animation)
 
 Game:addEntity(Lantern_D)
 
@@ -168,6 +181,8 @@ end, function(col)
    col.item:give(C.lit, Vector(-1, 0))
    col.item:check()
 end)
+:give(C.lightable, Vector(-1, 0))
+:give(C.animation, lantern_animation)
 
 Game:addEntity(Lantern_L)
 
@@ -183,6 +198,8 @@ end, function(col)
    col.item:give(C.lit, Vector(1, 0))
    col.item:check()
 end)
+:give(C.lightable, Vector(1, 0))
+:give(C.animation, lantern_animation)
 
 Game:addEntity(Lantern_R)
 

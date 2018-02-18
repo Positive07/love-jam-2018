@@ -13,4 +13,5 @@ return {
    trigger       = require("src.components.trigger"),
    lit           = require("src.components.lit"),
    animation     = require("src.components.animation"),
+   lightable     = require("src.components.lightable"),
 }
