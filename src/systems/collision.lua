@@ -17,7 +17,12 @@ function Collider:entityAdded(e)
    local collider  = e:get(C.collider)
 
    collider.world = self.world
-   self.world:add(e, transform.position.x - transform.size.x/2, transform.position.y - transform.size.y/2, transform.size.x, transform.size.y)
+   self.world:add(
+     e,
+     transform.position.x - transform.size.x/2,
+     transform.position.y - transform.size.y/2,
+     transform.size.x, transform.size.y
+    )
 end
 
 function Collider:entityRemoved(e)
@@ -34,14 +39,16 @@ function Collider:entityRemoved(e)
 end
 
 function Collider:update()
-   local e
-   for i = 1, self.pool.size do
-      local e = self.pool:get(i)
-
+   for j = 1, self.pool.size do
+      local e = self.pool:get(j)
       local transform = e:get(C.transform)
-      local collider  = e:get(C.collider)
 
-      local newx, newy, cols, len = self.world:move(e, transform.position.x - transform.size.x/2, transform.position.y - transform.size.y/2, self.propagate)
+      local newx, newy, cols, len = self.world:move(
+        e,
+        transform.position.x - transform.size.x/2,
+        transform.position.y - transform.size.y/2,
+        self.propagate
+      )
       transform.position:set(newx + transform.size.x/2, newy + transform.size.y/2)
 
       e:remove(C.grounded)

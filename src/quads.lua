@@ -19,6 +19,7 @@ local named = {
   [7] = 4, [15] = 5, [13] = 6,
   [3] = 7, [11] = 8, [ 9] = 9
 }
+
 local function patch (name, x, y)
   for i=0, 15 do
     local n = name..'-'..i

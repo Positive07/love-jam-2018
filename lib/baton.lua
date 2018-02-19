@@ -22,55 +22,57 @@
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 ]]
-local class = require "lib.class"
-local Baton = class "Baton"
+local Baton = {}
 
 local keyboardSource = {}
 
-function keyboardSource:key(key)
+function keyboardSource.key(key)
    return love.keyboard.isDown(key) and 1 or 0
 end
 
-function keyboardSource:sc(sc)
+function keyboardSource.sc(sc)
    return love.keyboard.isScancodeDown(sc) and 1 or 0
 end
 
-function keyboardSource:mouse(button)
+function keyboardSource.mouse(button)
    return love.mouse.isDown(tonumber(button)) and 1 or 0
 end
 
 local joystickSource = {}
 
-function joystickSource:axis(value)
+function joystickSource.axis(joystick, value)
    local axis, direction = value:match '(.+)([%+%-])'
 
    if tonumber(axis) then
-      value = self.joystick:getAxis(tonumber(axis))
+      value = joystick:getAxis(tonumber(axis))
    else
-      value = self.joystick:getGamepadAxis(axis)
+      value = joystick:getGamepadAxis(axis)
    end
 
    if direction == '-' then value = -value end
    return value > 0 and value or 0
 end
 
-function joystickSource:button(button)
+function joystickSource.button(joystick, button)
    if tonumber(button) then
-      return self.joystick:isDown(tonumber(button)) and 1 or 0
+      return joystick:isDown(tonumber(button)) and 1 or 0
    else
-      return self.joystick:isGamepadDown(button) and 1 or 0
+      return joystick:isGamepadDown(button) and 1 or 0
    end
 end
 
-function joystickSource:hat(value)
+function joystickSource.hat(joystick, value)
    local hat, direction = value:match('(%d)(.+)')
-   if self.joystick:getHat(hat) == direction then
+   if joystick:getHat(hat) == direction then
       return 1
    end
    return 0
 end
 
-function Baton:update()
+local Player = {}
+Player.__index = Player
+
+function Player:update()
    local keyboardUsed = false
    local joystickUsed = false
 
@@ -81,13 +83,13 @@ function Baton:update()
       for _, s in ipairs(self.controls[controlName]) do
          local type, value = s:match '(.+):(.+)'
          if keyboardSource[type] then
-            if keyboardSource[type](self, value) == 1 then
+            if keyboardSource[type](value) == 1 then
                control.rawValue = 1
                keyboardUsed = true
                break
             end
          elseif joystickSource[type] and self.joystick then
-            local v = joystickSource[type](self, value)
+            local v = joystickSource[type](self.joystick, value)
             if v > 0 then
                joystickUsed = true
                control.rawValue = control.rawValue + v
@@ -156,7 +158,7 @@ local function getCheckedControl(controls, name)
    return controls[name] or error("No control with name '"..name.."' defined", 3)
 end
 
-function Baton:getRaw(name)
+function Player:getRaw(name)
    if self._pairs[name] then
       return self._pairs[name].rawX or 0, self._pairs[name].rawY or 0
    else
@@ -164,7 +166,7 @@ function Baton:getRaw(name)
    end
 end
 
-function Baton:get(name)
+function Player:get(name)
    if self._pairs[name] then
       return self._pairs[name].x or 0, self._pairs[name].y or 0
    else
@@ -172,46 +174,51 @@ function Baton:get(name)
    end
 end
 
-function Baton:down(name)
+function Player:down(name)
    local control = self._pairs[name] or getCheckedControl(self._controls, name)
    return control.down or false
 end
 
-function Baton:pressed(name)
+function Player:pressed(name)
    local control = self._pairs[name] or getCheckedControl(self._controls, name)
    return control.pressed or false
 end
 
-function Baton:released(name)
+function Player:released(name)
    local control = self._pairs[name] or getCheckedControl(self._controls, name)
    return control.released or false
 end
 
-function Baton:getActiveDevice()
+function Player:getActiveDevice()
    return self._activeDevice
 end
 
-function Baton:initialize(config)
+function Baton.new(config)
    if not config.controls then error('No controls defined', 2) end
 
-   self.controls = config.controls
-   self.pairs    = config.pairs
-   self.joystick = config.joystick
+   local player = {
+      controls = config.controls,
+      pairs    = config.pairs,
+      joystick = config.joystick,
 
-   self.deadzone = .5
-   self.squareDeadzone = false
+      deadzone = .5,
+      squareDeadzone = false,
 
-   self._controls = {}
+      _controls = {},
+      _pairs = {}
+   }
+
    for controlName, _ in pairs(config.controls) do
-      self._controls[controlName] = {}
+      player._controls[controlName] = {}
    end
 
-   self._pairs = {}
    if config.pairs then
       for pairName, _ in pairs(config.pairs) do
-         self._pairs[pairName] = {}
+         player._pairs[pairName] = {}
       end
    end
+
+   return setmetatable(player, Player)
 end
 
 return Baton

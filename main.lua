@@ -114,7 +114,7 @@ local Platform = Fluid.entity()
    {quad = Quads.spike_up, offset = Vector(8, 5), layer = 3.5},
 })
 :give(C.body, Vector(0, 0), nil, nil, 0)
-:give(C.collider, function(item, other)
+:give(C.collider, function(_, other)
    local body = other:get(C.body)
 
    if body.velocity.y > 0 then

@@ -31,8 +31,6 @@ local bump = {}
 ------------------------------------------
 -- Auxiliary functions
 ------------------------------------------
-local class = require "lib.class"
-
 local DELTA = 1e-10 -- floating-point margin of error
 
 local abs, floor, ceil, min, max = math.abs, math.floor, math.ceil, math.min, math.max
@@ -322,7 +320,8 @@ end
 -- World
 ------------------------------------------
 
-local World = class "World"
+local World = {}
+World.__index = World
 
 -- Private functions and methods
 
@@ -751,24 +750,27 @@ end
 
 
 -- Public library functions
-function World:initialize (cellSize)
+bump.newWorld = function (cellSize)
    cellSize = cellSize or 64
    assertIsPositiveNumber(cellSize, 'cellSize')
-   self.cellSize = cellSize
 
-   self.rects = {}
-   self.rows  = {}
+   local self = setmetatable({
+      cellSize = cellSize,
 
-   self.nonEmptyCells = {}
-   self.responses     = {}
+      rects = {},
+      rows  = {},
+
+      nonEmptyCells = {},
+      responses     = {}
+   }, World)
 
    self:addResponse('touch', touch)
    self:addResponse('cross', cross)
    self:addResponse('slide', slide)
    self:addResponse('bounce', bounce)
-end
 
-bump.newWorld = World
+   return self
+end
 
 bump.rect = {
    getNearestCorner              = rect_getNearestCorner,

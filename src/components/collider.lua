@@ -1,17 +1,13 @@
 local Fluid  = require("lib.fluid")
-local Vector = require("lib.vector")
 
 local Body        = require("src.components.body")
 local Grounded    = require("src.components.grounded")
 
-local Collider = Fluid.component(function(e, filter, resolve)
-   e.filter  = filter  or defFilter
-   e.resolve = resolve or defResolve
-   e.world   = nil
-end, true)
+local defFilter  = function() --e, other
+   return "slide"
+end
 
-Collider.filter  = function(item, other) return "slide" end
-Collider.resolve = function(col)
+local defResolve = function(col)
    local body = col.other:get(Body)
 
    if body then
@@ -28,5 +24,13 @@ Collider.resolve = function(col)
       end
    end
 end
+
+local Collider = Fluid.component(function(e, filter, resolve)
+   e.filter  = filter  or defFilter
+   e.resolve = resolve or defResolve
+   e.world   = nil
+end, true)
+
+
 
 return Collider

@@ -1,7 +1,7 @@
 local PATH = (...):gsub('%.[^%.]+$', '')
 
-local Component = require(PATH..".component")
-local Pool      = require(PATH..".pool")
+local Pool = require(PATH..".pool")
+local noop = function () end
 
 local System = {}
 System.mt    = {
@@ -36,14 +36,11 @@ function System.new(...)
    return systemProto
 end
 
-function System:init(...)
-end
-
-function System:__buildPool(pool)
+function System:__buildPool(pool) --luacheck: ignore unused self
    local name   = "pool"
    local filter = {}
 
-   for i, v in ipairs(pool) do
+   for _, v in ipairs(pool) do
       if type(v) == "table" then
          filter[#filter + 1] = v
       elseif type(v) == "string" then
@@ -55,7 +52,7 @@ function System:__buildPool(pool)
 end
 
 function System:__checkEntity(e)
-   local systemHas = self:__has(e)
+   --local systemHas = self:__has(e)
 
    for _, pool in ipairs(self.__pools) do
       local poolHas  = pool:has(e)
@@ -86,7 +83,7 @@ function System:__tryAdd(e)
    self.__all[e] = self.__all[e] + 1
 end
 
-function System:__tryRemove()
+function System:__tryRemove(e)
    if self:__has(e) then
       self.__all[e] = self.__all[e] - 1
 
@@ -115,17 +112,11 @@ function System:__has(e)
    return self.__all[e] and true
 end
 
-function System:entityAdded(e)
-end
-
-function System:entityAddedTo(e, pool)
-end
-
-function System:entityRemoved(e)
-end
-
-function System:entityRemovedFrom(e, pool)
-end
+System.init              = noop
+System.entityAdded       = noop
+System.entityAddedTo     = noop
+System.entityRemoved     = noop
+System.entityRemovedFrom = noop
 
 return setmetatable(System, {
    __call = function(_, ...) return System.new(...) end,

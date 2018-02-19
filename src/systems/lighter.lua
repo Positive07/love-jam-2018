@@ -53,7 +53,6 @@ function Lighter:entityAddedTo(e, pool)
    end
 end
 
-function Lighter:update(dt)
-end
+function Lighter:update() end --luacheck: ignore unused self
 
 return Lighter

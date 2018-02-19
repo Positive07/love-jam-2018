@@ -11,7 +11,7 @@ function SpriteRenderer:init()
 
    self.dirty = false
 
-   for i = 1, 10000 do
+   for _ = 1, 10000 do
       self.batch:add(nil, nil, nil, 0, 0)
    end
 
@@ -22,7 +22,6 @@ function SpriteRenderer:init()
    self.target = nil
 
    self.camera:zoomTo(2)
-
 
    self.shader:send("width", 1)
    self.shader:send("phase", 0)

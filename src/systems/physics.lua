@@ -11,7 +11,6 @@ function Physics:init(gravity)
 end
 
 function Physics:update(dt)
-   local e
    for i = 1, self.pool.size do
       local e = self.pool:get(i)
 
@@ -31,7 +30,7 @@ function Physics:update(dt)
 
       -- Ground friction
       if e:has(C.grounded) then
-         local friction = body.velocity.x
+         friction = body.velocity.x
          friction = friction - 1
          friction = friction * body.groundCoef
          friction = friction * dt
